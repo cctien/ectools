@@ -1,0 +1,77 @@
+import difflib
+from functools import partial as prt
+import re
+from typing import Any
+
+import rich
+import wadler_lindig
+
+
+def pprint(x: Any, /) -> None:
+    rich.print(wadler_lindig.pformat(x))
+
+
+def to_upper_camel_case(x: str, /) -> str:
+    return "".join(w.capitalize() for w in re.split(r"[_\W]+", x))
+
+
+def to_underscore(x: str, /) -> str:
+    return re.sub(r"[^a-zA-Z0-9]", "_", x)
+
+
+def ensure_blank_line_before_left_bracket(x: str, /) -> str:
+    # the pattern matches a line starting with '[' that does not have a blank line before it; useful for toml file creation
+    return re.sub(r"(?<!\n\n)(\n)(?=\[)", "\n\n", x)
+
+
+def have_newlines_at_the_end(s: str, /, n: int) -> str:
+    return s.rstrip("\n") + "\n" * n
+
+
+def normalized_spaces(s: str, num_spaces: int) -> str:
+    return re.sub(r" +", " " * num_spaces, s)
+
+
+def normalized_double_spaces(s: str, num_spaces: int) -> str:
+    return re.sub(r" {2,}", " " * num_spaces, s)
+
+
+have_1_newline_at_the_end = prt(have_newlines_at_the_end, n=1)
+
+
+def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
+    text1_lines = text1.splitlines(keepends=True)
+    text2_lines = text2.splitlines(keepends=True)
+    diff = difflib.unified_diff(text1_lines, text2_lines, fromfile=fromfile, tofile=tofile)
+    return "".join(diff)
+
+
+if __name__ == "__main__":
+    import numpy as np
+    import math
+
+    data = {
+        "a": 12,
+        "b": True,
+        "c": "word",
+        "d": np.pi,
+        "e": 2.718281828459045235360287471352,
+        "f": (1 + math.sqrt(5)) / 2,
+    }
+
+    pprint("print")
+    print(data)
+    print()
+
+    pprint("wadler_lindig.pprint")
+    wadler_lindig.pprint(data)
+    print()
+
+    pprint("rich.print")
+    rich.print(data)
+    print()
+
+    pprint("rich.print ∘ wadler_lindig.pformat")
+    pprint(data)
+
+    pprint(f"to_upper_camel_case: {to_upper_camel_case("this_is_to_upper_camel_case")}")

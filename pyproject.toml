@@ -1,0 +1,34 @@
+[project]
+name = "ectools"
+version = "0.0.1"
+description = "eclectic tools for various tasks"
+authors = [{ name = "Chih-chan Tien", email = "chihchan.tien@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "dacite",
+    "numpy",
+    "omegaconf",
+    "phx-class-registry",
+    "rich",
+    "wadler_lindig",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/cctien/ectools"
+"Bug Tracker" = "https://github.com/cctien/ectools/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
