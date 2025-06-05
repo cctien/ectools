@@ -19,6 +19,14 @@ def to_underscore(x: str, /) -> str:
     return re.sub(r"[^a-zA-Z0-9]", "_", x)
 
 
+def to_snake_case(x: str, /) -> str:
+    return re.sub(r"[^a-zA-Z0-9]+", "_", x).strip("_").lower()
+
+
+def to_spaced_case_from_snake(x: str, /) -> str:
+    return re.sub(r"_+", " ", x).strip()
+
+
 def ensure_blank_line_before_left_bracket(x: str, /) -> str:
     # the pattern matches a line starting with '[' that does not have a blank line before it; useful for toml file creation
     return re.sub(r"(?<!\n\n)(\n)(?=\[)", "\n\n", x)

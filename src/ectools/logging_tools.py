@@ -77,32 +77,6 @@ def get_file_handler(
     return file_handler
 
 
-def wandb_init(cnfgr: Mapping):
-    import wandb
-
-    cnfgr = mapping_to_dict_rcrs(deepcopy(cnfgr))
-    cnfgr_wandb = cnfgr.pop("wandb")
-    return wandb.init(config=cnfgr, **cnfgr_wandb)
-
-
-class WandbHandler(logging.Handler):
-    import wandb
-
-    def emit(self, record):
-        wandb.log({"log": self.fmt(record)})
-
-
-def get_wandb_handler(
-    level: int | str = logging.INFO,
-    fmt: str = default_fmt,
-    datefmt: str = default_datefmt,
-) -> WandbHandler:
-    wandb_handler = WandbHandler()
-    wandb_handler.setLevel(level)
-    wandb_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
-    return wandb_handler
-
-
 def set_root_logger(
     level: int | str = logging.INFO,
     stream: Mapping | None = {},
@@ -131,7 +105,7 @@ def set_root_logger(
         logger.addHandler(file_handler)
 
     if wandb is not None:
-        import wandb
+        from .logging_wandb_tools import get_wandb_handler
 
         wandb = mapping_to_dict_rcrs(deepcopy(wandb))
         wandb["level"] = level if wandb.get("level") is None else wandb["level"]

@@ -1,0 +1,9 @@
+dacite
+numpy
+omegaconf
+phx-class-registry
+rich
+wadler_lindig
+
+ipython
+# wandb
