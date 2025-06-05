@@ -7,7 +7,7 @@ import os
 from rich.logging import RichHandler
 import wandb
 
-from .functional_tools import mapping_to_dict_rcrs
+from .collection import mapping_to_dict_rcrs
 
 noisy_loggers_to_be_suppressed = ("requests", "urlib3")
 default_log_file_name = "log.txt"

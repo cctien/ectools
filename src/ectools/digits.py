@@ -53,7 +53,7 @@ def convert_to_scientific_if_longer(x: str, max_length: int = 3) -> str:
 
 
 if __name__ == "__main__":
-    from .logging_tools import set_root_logger
+    from .logging import set_root_logger
 
     set_root_logger(stream={"level": "DEBUG"})
 
