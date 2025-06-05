@@ -3,6 +3,7 @@ name = "ectools"
 version = "0.0.1"
 description = "eclectic tools for various tasks"
 authors = [{ name = "Chih-chan Tien", email = "chihchan.tien@gmail.com" }]
+license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
