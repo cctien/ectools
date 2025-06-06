@@ -1,8 +1,11 @@
-from collections.abc import Sequence
 import fnmatch
-from functools import partial as prt, reduce
 import os
+from collections.abc import Sequence
+from functools import partial as prt
+from functools import reduce
 from operator import add
+
+from plum import dispatch
 
 
 def subdirectories(x: str, /) -> list[str]:
@@ -18,6 +21,7 @@ def subdirectories(x: str, /) -> list[str]:
     return subdirs
 
 
+@dispatch
 def files_matched(dirname: str, pattern: str) -> list[str]:
     if not os.path.isdir(dirname):
         raise NotADirectoryError(f"{dirname} is not a directory")
@@ -26,5 +30,18 @@ def files_matched(dirname: str, pattern: str) -> list[str]:
     for root, dirs, files in os.walk(dirname):
         for filename in fnmatch.filter(files, pattern):
             matched_files.append(os.path.join(root, filename))
+
+    return matched_files
+
+
+@dispatch
+def files_matched(dirname: str, patterns: Sequence[str]) -> list[str]:
+    """Return all files in a directory that match any of the given patterns."""
+    if not os.path.isdir(dirname):
+        raise NotADirectoryError(f"{dirname} is not a directory")
+
+    matched_files = []
+    for pattern in patterns:
+        matched_files.extend(files_matched(dirname, pattern))
 
     return matched_files

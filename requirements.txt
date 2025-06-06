@@ -2,6 +2,7 @@ dacite
 numpy
 omegaconf
 phx-class-registry
+plum-dispatch
 rich
 toolz
 wadler_lindig
