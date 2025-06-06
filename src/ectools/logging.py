@@ -7,6 +7,7 @@ from datetime import datetime
 from rich.logging import RichHandler
 
 from .collection import mapping_to_dict_rcrs
+from .time import time_now_filing
 
 noisy_loggers_to_be_suppressed = ("requests", "urlib3")
 default_log_file_name = "log.txt"
@@ -29,8 +30,7 @@ def get_full_log_file_path(log_dir: str | None, log_time_subdir: bool, log_file:
 
     log_dir = log_dir or ""
     if log_time_subdir:
-        now = datetime.now()
-        log_subdir = now.strftime("%Y%m%d_%H%M%S%f")
+        log_subdir = time_now_filing()
     else:
         log_subdir = ""
 
