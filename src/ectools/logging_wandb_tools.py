@@ -1,11 +1,9 @@
-from collections.abc import Iterable, Mapping
-from copy import deepcopy
-from datetime import datetime
+import copy
 import logging
-import os
+from collections.abc import Mapping
 
-from rich.logging import RichHandler
 import wandb
+from rich.logging import RichHandler
 
 from .collection import mapping_to_dict_rcrs
 
@@ -16,7 +14,7 @@ default_datefmt: str = "%Y%m%d-%H:%M:%S"
 
 
 def wandb_init(cnfgr: Mapping):
-    cnfgr = mapping_to_dict_rcrs(deepcopy(cnfgr))
+    cnfgr = mapping_to_dict_rcrs(copy.deepcopy(cnfgr))
     cnfgr_wandb = cnfgr.pop("wandb")
     return wandb.init(config=cnfgr, **cnfgr_wandb)
 
