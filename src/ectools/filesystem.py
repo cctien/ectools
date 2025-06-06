@@ -21,7 +21,6 @@ def subdirectories(x: str, /) -> list[str]:
     return subdirs
 
 
-@dispatch
 def files_matched(dirname: str, pattern: str) -> list[str]:
     if not os.path.isdir(dirname):
         raise NotADirectoryError(f"{dirname} is not a directory")
@@ -34,8 +33,7 @@ def files_matched(dirname: str, pattern: str) -> list[str]:
     return matched_files
 
 
-@dispatch
-def files_matched(dirname: str, patterns: Sequence[str]) -> list[str]:
+def files_matched_patterns(dirname: str, patterns: Sequence[str]) -> list[str]:
     """Return all files in a directory that match any of the given patterns."""
     if not os.path.isdir(dirname):
         raise NotADirectoryError(f"{dirname} is not a directory")
