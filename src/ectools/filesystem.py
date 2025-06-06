@@ -1,11 +1,7 @@
 import fnmatch
 import os
+import shutil
 from collections.abc import Sequence
-from functools import partial as prt
-from functools import reduce
-from operator import add
-
-from plum import dispatch
 
 
 def subdirectories(x: str, /) -> list[str]:
@@ -43,3 +39,28 @@ def files_matched_patterns(dirname: str, patterns: Sequence[str]) -> list[str]:
         matched_files.extend(files_matched(dirname, pattern))
 
     return matched_files
+
+
+def copy_files_filtered_(
+    src_dir: str,
+    dst_dir: str,
+    exclude_patterns: Sequence[str] | None = None,
+    include_patterns: Sequence[str] | None = None,
+) -> None:
+    os.makedirs(dst_dir, exist_ok=True)
+    for item in os.listdir(src_dir):
+        src_path = os.path.join(src_dir, item)
+
+        if os.path.isdir(src_path):
+            continue
+        if include_patterns is not None and len(include_patterns) > 0:
+            matches_include = any(fnmatch.fnmatch(item, pattern) for pattern in include_patterns)
+            if not matches_include:
+                continue
+        if exclude_patterns is not None and len(exclude_patterns) > 0:
+            matches_exclude = any(fnmatch.fnmatch(item, pattern) for pattern in exclude_patterns)
+            if matches_exclude:
+                continue
+
+        dst_path = os.path.join(dst_dir, item)
+        shutil.copy2(src_path, dst_path)
