@@ -17,6 +17,7 @@ dependencies = [
     "omegaconf",
     "phx-class-registry",
     "rich",
+    "toolz",
     "wadler_lindig",
 ]
 

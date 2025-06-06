@@ -3,6 +3,7 @@ numpy
 omegaconf
 phx-class-registry
 rich
+toolz
 wadler_lindig
 
 ipython
