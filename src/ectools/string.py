@@ -1,6 +1,6 @@
 import difflib
-from functools import partial as prt
 import re
+from functools import partial as prt
 from typing import Any
 
 import rich
@@ -19,8 +19,8 @@ def snake_case(x: str, /) -> str:
     return re.sub(r"[^a-zA-Z0-9]+", "_", x).strip("_").lower()
 
 
-def ordinarily_spaced(x: str, /) -> str:
-    return re.sub(r"_+", " ", x).strip()
+def space_case(x: str, /) -> str:
+    return re.sub(r"[_\.]+", " ", x).strip()
 
 
 def ensure_blank_line_before_left_bracket(x: str, /) -> str:
@@ -54,8 +54,9 @@ def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
 #     return re.sub(r"[^a-zA-Z0-9]", "_", x)
 
 if __name__ == "__main__":
-    import numpy as np
     import math
+
+    import numpy as np
 
     data = {
         "a": 12,
