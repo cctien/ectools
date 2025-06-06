@@ -1,5 +1,6 @@
 import difflib
 import re
+from collections.abc import Sequence
 from functools import partial as prt
 from typing import Any
 
@@ -48,6 +49,10 @@ def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
     text2_lines = text2.splitlines(keepends=True)
     diff = difflib.unified_diff(text1_lines, text2_lines, fromfile=fromfile, tofile=tofile)
     return "".join(diff)
+
+
+def join(x: Sequence[str]) -> str:
+    return "".join(x)
 
 
 # def to_underscore(x: str, /) -> str:
