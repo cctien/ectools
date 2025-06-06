@@ -11,19 +11,15 @@ def pprint(x: Any, /) -> None:
     rich.print(wadler_lindig.pformat(x))
 
 
-def to_upper_camel_case(x: str, /) -> str:
+def upper_camel_case(x: str, /) -> str:
     return "".join(w.capitalize() for w in re.split(r"[_\W]+", x))
 
 
-def to_underscore(x: str, /) -> str:
-    return re.sub(r"[^a-zA-Z0-9]", "_", x)
-
-
-def to_snake_case(x: str, /) -> str:
+def snake_case(x: str, /) -> str:
     return re.sub(r"[^a-zA-Z0-9]+", "_", x).strip("_").lower()
 
 
-def to_spaced_case_from_snake(x: str, /) -> str:
+def ordinarily_spaced(x: str, /) -> str:
     return re.sub(r"_+", " ", x).strip()
 
 
@@ -54,6 +50,9 @@ def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
     return "".join(diff)
 
 
+# def to_underscore(x: str, /) -> str:
+#     return re.sub(r"[^a-zA-Z0-9]", "_", x)
+
 if __name__ == "__main__":
     import numpy as np
     import math
@@ -82,4 +81,4 @@ if __name__ == "__main__":
     pprint("rich.print ∘ wadler_lindig.pformat")
     pprint(data)
 
-    pprint(f"to_upper_camel_case: {to_upper_camel_case("this_is_to_upper_camel_case")}")
+    pprint(f"to_upper_camel_case: {upper_camel_case("this_is_to_upper_camel_case")}")
