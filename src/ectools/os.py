@@ -66,6 +66,6 @@ def read_file(filepath: str) -> str:
         return file.read()
 
 
-def write_file(content: str, filepath: str) -> None:
+def write_file_(content: str, filepath: str) -> None:
     with open(filepath, "w") as file:
         file.write(content)
