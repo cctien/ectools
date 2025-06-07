@@ -1,7 +1,7 @@
-import logging
 import datetime
-from pathlib import Path
+import logging
 import subprocess
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,6 @@ def read_file(filepath: str) -> str:
         return file.read()
 
 
-def write_file(filepath: str, content: str) -> None:
+def write_file(content: str, filepath: str) -> None:
     with open(filepath, "w") as file:
         file.write(content)
