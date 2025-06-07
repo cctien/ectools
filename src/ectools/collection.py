@@ -1,9 +1,15 @@
-from collections.abc import Collection, Mapping
 import logging
+import operator
+from collections.abc import Collection, Mapping, Sequence
+from functools import reduce
 
-from omegaconf import OmegaConf, DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 logger = logging.getLogger(__name__)
+
+
+def cnct(*args: Sequence) -> Sequence:
+    return reduce(operator.concat, args)
 
 
 def to_dict_from_collection_rcrs[t](x: Collection | t) -> Collection | t:

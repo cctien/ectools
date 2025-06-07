@@ -21,9 +21,9 @@ def ngt(f: Callable[P, bool], /) -> Callable[P, bool]:
     return ngt_x
 
 
-def est(y: object, x: object, /) -> bool:
+def be(y: object, x: object, /) -> bool:
     return x is y
 
 
-def is_empty(x: Sized, /) -> bool:
+def be_empty(x: Sized, /) -> bool:
     return len(x) == 0
