@@ -41,8 +41,12 @@ def normalized_double_spaces(s: str, num_spaces: int) -> str:
     return re.sub(r" {2,}", " " * num_spaces, s)
 
 
-def n_spaces(n: int, /) -> str:
+def sp(n: int, /) -> str:
     return " " * n
+
+
+def nl(n: int, /) -> str:
+    return "\n" * n
 
 
 have_1_newline_at_the_end = prt(have_newlines_at_the_end, n=1)
