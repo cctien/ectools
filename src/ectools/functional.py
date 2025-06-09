@@ -1,6 +1,6 @@
 import functools
 import logging
-from collections.abc import Callable, Sized
+from collections.abc import Callable, Iterable, Sized
 from typing import ParamSpec, TypeVar
 
 T = TypeVar("T")
@@ -27,3 +27,7 @@ def be(y: object, x: object, /) -> bool:
 
 def be_empty(x: Sized, /) -> bool:
     return len(x) == 0
+
+
+def tplmap(func: Callable[[T], T], *iterables: Iterable[T]) -> tuple[T, ...]:
+    return tuple(map(func, *iterables))
