@@ -1,7 +1,15 @@
 import fnmatch
+import logging
 import os
+import os.path as osp
 import shutil
 from collections.abc import Sequence
+
+logger = logging.getLogger(__name__)
+
+
+def osp_basestem(filepath: str) -> str:
+    return osp.splitext(osp.basename(filepath))[0]
 
 
 def subdirectories(x: str, /) -> list[str]:
