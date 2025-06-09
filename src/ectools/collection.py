@@ -9,15 +9,15 @@ from plum import dispatch
 logger = logging.getLogger(__name__)
 
 
-@dispatch
 def sole_item[t](x: Collection[t]) -> t:
     assert len(x) == 1
     return next(iter(x))
 
 
-@dispatch
 def unique_item[t](x: Iterable[t]) -> t:
-    return sole_item(set(x))
+    set_x = set(x)
+    assert len(set_x) == 1
+    return next(iter(set_x))
 
 
 @dispatch
