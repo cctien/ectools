@@ -2,19 +2,11 @@ import logging
 import operator
 from collections.abc import Collection, Hashable, Mapping, Sequence
 from functools import reduce
-from typing import ParamSpec, TypeVar
 
 from omegaconf import DictConfig, OmegaConf
 from plum import dispatch
 
-# from operator import getitem
-
-ex = slice(None, None, None)  # noqa: E741
-
 logger = logging.getLogger(__name__)
-
-P = ParamSpec("P")
-T = TypeVar("T")
 
 
 @dispatch
