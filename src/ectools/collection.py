@@ -1,6 +1,6 @@
 import logging
 import operator
-from collections.abc import Collection, Hashable, Mapping, Sequence
+from collections.abc import Collection, Hashable, Iterable, Mapping, Sequence
 from functools import reduce
 
 from omegaconf import DictConfig, OmegaConf
@@ -34,9 +34,15 @@ def get(tbl: dict, key: Hashable, default: object = None) -> object:
     return tbl.get(key, default)
 
 
+@dispatch
 def sole_item(x: Collection) -> object:
     assert len(x) == 1
     return next(iter(x))
+
+
+@dispatch
+def unique_item(x: Iterable) -> object:
+    return sole_item(set(x))
 
 
 @dispatch
