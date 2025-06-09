@@ -34,6 +34,11 @@ def get(tbl: dict, key: Hashable, default: object = None) -> object:
     return tbl.get(key, default)
 
 
+def sole_item(x: Collection) -> object:
+    assert len(x) == 1
+    return next(iter(x))
+
+
 @dispatch
 def get(key: Hashable, tbl: dict, default: object = None) -> object:
     return tbl.get(key, default)
