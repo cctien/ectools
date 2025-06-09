@@ -8,6 +8,14 @@ from collections.abc import Sequence
 logger = logging.getLogger(__name__)
 
 
+def osp_stem(filepath: str) -> str:
+    return osp.splitext(filepath)[0]
+
+
+def osp_extension(filepath: str) -> str:
+    return osp.splitext(filepath)[1]
+
+
 def osp_basestem(filepath: str) -> str:
     return osp.splitext(osp.basename(filepath))[0]
 
