@@ -1,7 +1,6 @@
 import logging
-import operator
 from collections.abc import Collection, Hashable, Iterable, Mapping, Sequence
-from functools import reduce
+from itertools import chain
 
 from omegaconf import DictConfig, OmegaConf
 from plum import dispatch
@@ -18,6 +17,10 @@ def unique_item[t](x: Iterable[t]) -> t:
     set_x = set(x)
     assert len(set_x) == 1
     return next(iter(set_x))
+
+
+def tplchain[t](*iterables: Iterable[t]) -> Sequence[t]:
+    return tuple(chain(*iterables))
 
 
 @dispatch
@@ -48,10 +51,6 @@ def get(tbl: dict, key: Hashable, default: object = None) -> object:
 @dispatch
 def get(key: Hashable, tbl: dict, default: object = None) -> object:
     return tbl.get(key, default)
-
-
-def cnct(*args: Sequence) -> Sequence:
-    return reduce(operator.concat, args)
 
 
 def to_dict_from_collection_rcrs[t](x: Collection | t) -> Collection | t:
