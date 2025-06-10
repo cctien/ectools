@@ -25,19 +25,19 @@ def osp_basestem(x: str, /) -> str:
 def subdirnames(x: str, /) -> Sequence[str]:
     result = []
     for root, dirs, files in os.walk(x):
-        result.extend(chain(*map(prt(osp.join, root), dirs)))
+        result.extend(list(map(prt(osp.join, root), dirs)))
     return tuple(result)
 
 
 def files_matched(dirname: str, pattern: str) -> Sequence[str]:
     result = []
     for root, dirs, files in os.walk(dirname):
-        result.extend(chain(*map(prt(osp.join, root), fnmatch.filter(files, pattern))))
+        result.extend(list(map(prt(osp.join, root), fnmatch.filter(files, pattern))))
     return tuple(result)
 
 
 def files_matched_patterns(dirname: str, patterns: Iterable[str]) -> Sequence[str]:
-    return tuple(chain(*map(prt(files_matched, dirname), patterns)))
+    return tuple(chain.from_iterable(map(prt(files_matched, dirname), patterns)))
 
 
 def copy_files_filtered_(
@@ -60,3 +60,10 @@ def copy_files_filtered_(
             if matches_exclude:
                 continue
         shutil.copy2(src_path, osp.join(dst_dir, item))
+
+
+# python -m src.ectools.filesystem
+if __name__ == "__main__":
+    fmp = files_matched_patterns(".", ("*.txt", "*.md", "<no_such_file>", "[no_such_file]"))
+    fm = files_matched(".", "*.txt")
+    breakpoint()
