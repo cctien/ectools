@@ -1,11 +1,11 @@
-dacite
+plum-dispatch
+
 numpy
+scipy
+
+dacite
 omegaconf
 phx-class-registry
-plum-dispatch
-rich
-toolz
-wadler_lindig
 
-ipython
-# wandb
+rich
+wadler_lindig
