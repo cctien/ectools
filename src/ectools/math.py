@@ -15,5 +15,5 @@ def logsumexp(
     axis: int | tuple[int] | None = None,
     b: ArrayLike | None = None,
     keepdims: bool = False,
-) -> ArrayLike:
-    return special.logsumexp(a, axis=axis, b=b, keepdims=keepdims)
+) -> np.ndarray:
+    return special.logsumexp(a, axis=axis, b=b, keepdims=keepdims)  # type: ignore[return-value]
