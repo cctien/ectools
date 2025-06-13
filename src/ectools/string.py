@@ -66,6 +66,7 @@ def join(x: Sequence[str]) -> str:
 # def to_underscore(x: str, /) -> str:
 #     return re.sub(r"[^a-zA-Z0-9]", "_", x)
 
+# python -m src.ectools.string
 if __name__ == "__main__":
     import math
 
@@ -96,3 +97,10 @@ if __name__ == "__main__":
     pprint(data)
 
     pprint(f"to_upper_camel_case: {upper_camel_case("this_is_to_upper_camel_case")}")
+
+    sa = "this is a line\nthis is still the same\nthis is the third line\nthis is the fourth line\n"
+    sb = "this is a line\nthis is still the same\nthis is just another line\nthis is the fourth line\n"
+    string_diff_result = string_diff(sa, sb)
+    print(sa)
+    print(sb)
+    print(string_diff_result)
