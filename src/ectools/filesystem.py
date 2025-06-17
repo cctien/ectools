@@ -40,11 +40,33 @@ def files_matched_patterns(dirname: str, patterns: Iterable[str]) -> Sequence[st
     return tuple(chain.from_iterable(map(prt(files_matched, dirname), patterns)))
 
 
+def files_filtered(
+    dirname: str,
+    include_patterns: Sequence[str] | None = None,
+    exclude_patterns: Sequence[str] | None = None,
+) -> Sequence[str]:
+    result = []
+    for item in os.listdir(dirname):
+        filepath = osp.join(dirname, item)
+        if osp.isdir(filepath):
+            continue
+        if include_patterns is not None and len(include_patterns) > 0:
+            matches_include = any(fnmatch.fnmatch(item, pattern) for pattern in include_patterns)
+            if not matches_include:
+                continue
+        if exclude_patterns is not None and len(exclude_patterns) > 0:
+            matches_exclude = any(fnmatch.fnmatch(item, pattern) for pattern in exclude_patterns)
+            if matches_exclude:
+                continue
+        result.append(filepath)
+    return result
+
+
 def copy_files_filtered_(
     src_dir: str,
     dst_dir: str,
-    exclude_patterns: Sequence[str] | None = None,
     include_patterns: Sequence[str] | None = None,
+    exclude_patterns: Sequence[str] | None = None,
 ) -> None:
     os.makedirs(dst_dir, exist_ok=True)
     for item in os.listdir(src_dir):
