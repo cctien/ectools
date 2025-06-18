@@ -1,5 +1,6 @@
 import logging
 import os
+import os.path as osp
 from collections.abc import Iterable, Mapping
 from copy import deepcopy
 from datetime import datetime
@@ -10,6 +11,7 @@ from .collection import mapping_to_dict_rcrs
 from .time import time_now_filing
 
 noisy_loggers_to_be_suppressed = ("requests", "urlib3")
+default_log_file_dirname = "results/logs"
 default_log_file_name = "log.txt"
 default_fmt: str = "%(asctime)s-%(name)s-%(levelname)s\t%(message)s"
 default_datefmt: str = "%Y%m%d-%H:%M:%S"
@@ -26,23 +28,34 @@ def set_logger_level_handlers_lowest_(logger: logging.Logger):
     logger.setLevel(min(handler.level for handler in (*logger.handlers, logger)))
 
 
-def get_full_log_file_path(log_dir: str | None, log_time_subdir: bool, log_file: str | None) -> str:
+def get_full_log_file_path(dirname: str | None, time_subdir: bool, filename: str | None) -> str:
+    dirname = dirname or default_log_file_dirname
+    log_subdir = time_now_filing() if time_subdir else ""
+    filename = filename or default_log_file_name
+    result = osp.join(dirname, log_subdir, filename)
 
-    log_dir = log_dir or ""
-    if log_time_subdir:
-        log_subdir = time_now_filing()
-    else:
-        log_subdir = ""
+    full_dirname = osp.dirname(result)
+    if time_subdir:
+        assert not osp.exists(full_dirname), f"Log directory {full_dirname} already exists."
+    os.makedirs(full_dirname, exist_ok=True)
+    return result
 
-    log_file = default_log_file_name if log_file is None else log_file
-    log_file_dirname, log_file_basename = os.path.split(log_file)
 
-    full_log_dir = os.path.join(log_dir, log_subdir, log_file_dirname)
-    if log_time_subdir:
-        assert not os.path.exists(full_log_dir), f"Log directory {full_log_dir} already exists."
-    os.makedirs(full_log_dir, exist_ok=True)
-
-    return os.path.join(full_log_dir, log_file_basename)
+def get_file_handler(
+    level: int | str = logging.INFO,
+    dirname: str | None = None,
+    time_subdir: bool = False,
+    filename: str | None = None,
+    fmt: str = default_fmt,
+    datefmt: str = default_datefmt,
+) -> logging.Handler:
+    if dirname is not None:
+        os.makedirs(dirname, exist_ok=True)
+    full_log_file_path = get_full_log_file_path(dirname, time_subdir, filename)
+    file_handler = logging.FileHandler(full_log_file_path)
+    file_handler.setLevel(level)
+    file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
+    return file_handler
 
 
 def get_stream_handler(
@@ -58,23 +71,6 @@ def get_stream_handler(
     console_handler.setLevel(level)
     console_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     return console_handler
-
-
-def get_file_handler(
-    level: int | str = logging.INFO,
-    log_dir: str | None = "outputs/logs/",
-    log_time_subdir: bool = False,
-    log_file: str | None = None,
-    fmt: str = default_fmt,
-    datefmt: str = default_datefmt,
-) -> logging.Handler:
-    if log_dir is not None:
-        os.makedirs(log_dir, exist_ok=True)
-    full_log_file_path = get_full_log_file_path(log_dir, log_time_subdir, log_file)
-    file_handler = logging.FileHandler(full_log_file_path)
-    file_handler.setLevel(level)
-    file_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
-    return file_handler
 
 
 def set_root_logger(
