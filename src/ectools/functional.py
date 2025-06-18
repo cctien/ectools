@@ -1,8 +1,8 @@
 import functools
 import logging
-from collections.abc import Callable, Iterable, Sized
+from collections.abc import Callable, Iterable, Sequence, Sized
 from types import NoneType
-from typing import ParamSpec, TypeVar
+from typing import Any, ParamSpec, TypeVar
 
 from plum import Function, dispatch
 
@@ -42,6 +42,10 @@ def be_not_none(x: object, /) -> bool:
 
 def tplmap(func: Callable[[T], T], *iterables: Iterable[T]) -> tuple[T, ...]:
     return tuple(map(func, *iterables))
+
+
+def apply_all[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Sequence[Any]:
+    return tuple(f(arg) for f in functions)
 
 
 # def add_none_variant(func):
