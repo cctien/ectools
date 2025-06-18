@@ -17,6 +17,11 @@ default_fmt: str = "%(asctime)s-%(name)s-%(levelname)s\t%(message)s"
 default_datefmt: str = "%Y%m%d-%H:%M:%S"
 
 
+def add_handler_root_logger_(handler: logging.Handler) -> None:
+    root_logger = logging.getLogger()
+    root_logger.addHandler(handler)
+
+
 def set_logger_level_handlers_lowest_(logger: logging.Logger):
     """
     Adjust the logger's level to match the most verbose (lowest) level among its handlers.
