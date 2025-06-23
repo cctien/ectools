@@ -20,6 +20,10 @@ def snake_case(x: str, /) -> str:
     return re.sub(r"[^a-zA-Z0-9]+", "_", x).strip("_").lower()
 
 
+def to_underscore(x: str, /) -> str:
+    return re.sub(r"[^a-zA-Z0-9]", "_", x)
+
+
 def space_case(x: str, /) -> str:
     return re.sub(r"[_\.]+", " ", x).strip()
 
@@ -62,9 +66,6 @@ def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
 def join(x: Sequence[str]) -> str:
     return "".join(x)
 
-
-# def to_underscore(x: str, /) -> str:
-#     return re.sub(r"[^a-zA-Z0-9]", "_", x)
 
 # python -m src.ectools.string
 if __name__ == "__main__":
