@@ -1,11 +1,11 @@
 import argparse
-from collections.abc import Mapping, Sequence
 import copy
-from dataclasses import is_dataclass
 import warnings
+from collections.abc import Mapping, Sequence
+from dataclasses import is_dataclass
 
 from class_registry import ClassRegistry
-from omegaconf import OmegaConf, DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 
 def commandline_args() -> tuple[str | None, Sequence[str]]:
@@ -54,8 +54,8 @@ def get_configuration(
         raise NotImplementedError
     if strict_level == 1:  # check
         for key in cnfgr_x_cli.keys():
-            if key not in cnfgr_x_file.keys():
-                message = f"Key {key} in command line arguments not found in file. "
+            if key not in cnfgr_x_file.keys() | cnfgr_x_programme.keys():
+                message = f"Key {key} in command line arguments not found in file or programme. "
                 warnings.warn(message)
                 breakpoint()
                 raise KeyError(message)
