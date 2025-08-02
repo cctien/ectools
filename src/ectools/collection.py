@@ -8,6 +8,16 @@ from plum import dispatch
 logger = logging.getLogger(__name__)
 
 
+def ordered_unique(seq: Sequence) -> Sequence:
+    seen = set()
+    result = []
+    for item in seq:
+        if item not in seen:
+            seen.add(item)
+            result.append(item)
+    return tuple(result)
+
+
 def sole_item[t](x: Collection[t]) -> t:
     assert len(x) == 1
     return next(iter(x))
