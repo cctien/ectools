@@ -8,7 +8,7 @@ from plum import dispatch
 logger = logging.getLogger(__name__)
 
 
-def ordered_unique(seq: Sequence) -> Sequence:
+def ordered_unique(seq: Iterable) -> Sequence:
     seen = set()
     result = []
     for item in seq:
