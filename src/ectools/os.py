@@ -1,6 +1,10 @@
 import datetime
+import json
 import logging
+import os
+import os.path as osp
 import subprocess
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -69,3 +73,14 @@ def read_file(filepath: str) -> str:
 def write_file_(filepath: str, content: str) -> None:
     with open(filepath, "w") as file:
         file.write(content)
+
+
+def json_save_(filepath: str, data: Sequence | Mapping, **kwargs) -> None:
+    os.makedirs(osp.dirname(filepath), exist_ok=True)
+    with open(filepath, "w") as f:
+        json.dump(data, f, **kwargs)
+
+
+def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
+    with open(filepath, "r") as f:
+        return json.load(f, **kwargs)
