@@ -75,10 +75,16 @@ def write_file_(filepath: str, content: str) -> None:
         file.write(content)
 
 
-def json_save_(filepath: str, data: Sequence | Mapping, **kwargs) -> None:
+def json_save_(
+    filepath: str,
+    data: Sequence | Mapping,
+    indent: int | None = None,
+    sort_keys: bool = False,
+    **kwargs,
+) -> None:
     os.makedirs(osp.dirname(filepath), exist_ok=True)
     with open(filepath, "w") as f:
-        json.dump(data, f, **kwargs)
+        json.dump(data, f, indent=indent, sort_keys=sort_keys, **kwargs)
 
 
 def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
