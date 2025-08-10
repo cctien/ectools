@@ -7,6 +7,8 @@ import subprocess
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
+import orjson
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,6 +77,24 @@ def write_file_(filepath: str, content: str) -> None:
         file.write(content)
 
 
+def orjson_load(filepath: str) -> Sequence | Mapping:
+    with open(filepath, "rb") as f:
+        return orjson.loads(f.read())
+
+
+def orjson_save_(
+    filepath: str, data: Sequence | Mapping, option: int | None = orjson.OPT_INDENT_2, **kwargs
+) -> None:
+    os.makedirs(osp.dirname(filepath), exist_ok=True)
+    with open(filepath, "wb") as f:
+        f.write(orjson.dumps(data, option=option, **kwargs))
+
+
+def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
+    with open(filepath, "r") as f:
+        return json.load(f, **kwargs)
+
+
 def json_save_(
     filepath: str,
     data: Sequence | Mapping,
@@ -85,8 +105,3 @@ def json_save_(
     os.makedirs(osp.dirname(filepath), exist_ok=True)
     with open(filepath, "w") as f:
         json.dump(data, f, indent=indent, sort_keys=sort_keys, **kwargs)
-
-
-def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
-    with open(filepath, "r") as f:
-        return json.load(f, **kwargs)

@@ -5,6 +5,7 @@ scipy
 
 dacite
 omegaconf
+orjson
 phx-class-registry
 
 rich

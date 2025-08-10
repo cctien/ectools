@@ -15,6 +15,7 @@ dependencies = [
     "dacite",
     "numpy",
     "omegaconf",
+    "orjson",
     "phx-class-registry",
     "plum-dispatch",
     "rich",
