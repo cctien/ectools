@@ -83,11 +83,11 @@ def orjson_load(filepath: str) -> Sequence | Mapping:
 
 
 def orjson_save_(
-    filepath: str, data: Sequence | Mapping, option: int | None = orjson.OPT_INDENT_2, **kwargs
+    filepath: str, data: Sequence | Mapping, option: int | None = orjson.OPT_INDENT_2
 ) -> None:
     os.makedirs(osp.dirname(filepath), exist_ok=True)
     with open(filepath, "wb") as f:
-        f.write(orjson.dumps(data, option=option, **kwargs))
+        f.write(orjson.dumps(data, option=option))
 
 
 def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
