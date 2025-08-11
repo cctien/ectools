@@ -1,16 +1,17 @@
 from collections.abc import Iterable, Sequence
+from typing import Any
 
 import pandas as pd
 
 
-def isna_all(x: Iterable) -> bool:
+def isna_all(x: Any) -> bool:
     y = pd.isna(x)
     if isinstance(y, bool):
         return y
     return y.all().item()
 
 
-def none_if_all_na(x: Iterable) -> None | Iterable:
+def none_if_all_na[t](x: t) -> t | None:
     if isna_all(x):
         return None
     return x
