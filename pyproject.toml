@@ -16,6 +16,7 @@ dependencies = [
     "numpy",
     "omegaconf",
     "orjson",
+    "pandas",
     "phx-class-registry",
     "plum-dispatch",
     "rich",

@@ -1,6 +1,7 @@
 plum-dispatch
 
 numpy
+pandas
 scipy
 
 dacite
