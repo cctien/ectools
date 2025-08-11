@@ -1,11 +1,17 @@
 import logging
-from collections.abc import Collection, Hashable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Collection, Hashable, Iterable, Mapping, Sequence
 from itertools import chain
 
 from omegaconf import DictConfig, OmegaConf
 from plum import dispatch
 
 logger = logging.getLogger(__name__)
+
+
+def sorted_keys(
+    tbl: Mapping, /, *, key: Callable | None = None, reverse: bool = False, factory: Callable = dict
+) -> Mapping:
+    return factory((k, tbl[k]) for k in sorted(tbl.keys(), key=key, reverse=reverse))
 
 
 def ordered_unique(seq: Iterable) -> Sequence:
