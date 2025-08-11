@@ -12,6 +12,17 @@ def pprint(x: Any, /) -> None:
     rich.print(wadler_lindig.pformat(x))
 
 
+def bool_ex_str(x: str, /) -> bool:
+    y = x.strip().lower()
+    match x:
+        case "true" | "yes" | "y" | "1":
+            return True
+        case "false" | "no" | "n" | "0":
+            return False
+        case _:
+            raise ValueError(f"Unknown boolean string: {x}")
+
+
 def upper_camel_case(x: str, /) -> str:
     return "".join(w.capitalize() for w in re.split(r"[_\W]+", x))
 
