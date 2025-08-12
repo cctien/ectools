@@ -8,6 +8,7 @@ dacite
 omegaconf
 orjson
 phx-class-registry
+pyyaml
 
 rich
 wadler_lindig
