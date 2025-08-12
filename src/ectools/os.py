@@ -1,13 +1,7 @@
 import datetime
-import json
 import logging
-import os
-import os.path as osp
 import subprocess
-from collections.abc import Mapping, Sequence
 from pathlib import Path
-
-import orjson
 
 logger = logging.getLogger(__name__)
 
@@ -65,46 +59,3 @@ def get_tree_string(directory, prefix="", is_last=True):
         result += f"{new_prefix}[Permission Denied]\n"
 
     return result
-
-
-def read_file(filepath: str) -> str:
-    with open(filepath, "r") as file:
-        return file.read()
-
-
-def write_file_(filepath: str, content: str) -> None:
-    with open(filepath, "w") as file:
-        file.write(content)
-
-
-def orjson_load(filepath: str) -> Sequence | Mapping:
-    with open(filepath, "rb") as f:
-        return orjson.loads(f.read())
-
-
-def orjson_save_(
-    filepath: str,
-    data: Sequence | Mapping,
-    option: int | None = orjson.OPT_APPEND_NEWLINE | orjson.OPT_INDENT_2,
-) -> None:
-    # TODO : expose options as parameters to this function
-    os.makedirs(osp.dirname(filepath), exist_ok=True)
-    with open(filepath, "wb") as f:
-        f.write(orjson.dumps(data, option=option))
-
-
-def json_load(filepath: str, **kwargs) -> Sequence | Mapping:
-    with open(filepath, "r") as f:
-        return json.load(f, **kwargs)
-
-
-def json_save_(
-    filepath: str,
-    data: Sequence | Mapping,
-    indent: int | None = None,
-    sort_keys: bool = False,
-    **kwargs,
-) -> None:
-    os.makedirs(osp.dirname(filepath), exist_ok=True)
-    with open(filepath, "w") as f:
-        json.dump(data, f, indent=indent, sort_keys=sort_keys, **kwargs)
