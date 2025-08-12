@@ -1,5 +1,5 @@
 import logging
-from collections.abc import Callable, Collection, Hashable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Collection, Hashable, Iterable, Mapping, Sequence, ValuesView
 from itertools import chain
 
 from omegaconf import DictConfig, OmegaConf
@@ -91,6 +91,10 @@ def mapping_to_dict_rcrs[t](x: Mapping) -> dict:
     if isinstance(x, Mapping):
         return {k: to_dict_from_collection_rcrs(v) for k, v in x.items()}
     raise TypeError(f"Unsupported type for mapping_to_dict_rcrs: {type(x)}. Expected Mapping.")
+
+
+def mappings_values(tbl: Mapping) -> ValuesView:
+    return tbl.values()
 
 
 # python -m src.ectools.collection
