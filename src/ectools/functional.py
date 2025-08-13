@@ -49,6 +49,7 @@ def apply_all[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Sequence[An
 
 
 zip_strict = functools.partial(zip, strict=True)
+zip_str = functools.partial(zip, strict=True)
 
 # def add_none_variant(func):
 #     """Decorator that adds a None -> None variant to a dispatched function"""
