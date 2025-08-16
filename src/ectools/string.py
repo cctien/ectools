@@ -8,7 +8,9 @@ import rich
 import wadler_lindig
 
 
-def pprint(x: Any, /) -> None:
+def pprint(x: Any = None, /) -> None:
+    if x is None:
+        print()
     rich.print(wadler_lindig.pformat(x))
 
 
