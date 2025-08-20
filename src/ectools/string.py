@@ -2,16 +2,6 @@ import difflib
 import re
 from collections.abc import Sequence
 from functools import partial as prt
-from typing import Any
-
-import rich
-import wadler_lindig
-
-
-def pprint(x: Any = None, /) -> None:
-    if x is None:
-        print()
-    rich.print(wadler_lindig.pformat(x))
 
 
 def bool_ex_str(x: str, /) -> bool:
@@ -76,41 +66,13 @@ def string_diff(text1: str, text2: str, fromfile: str = "", tofile: str = ""):
     return "".join(diff)
 
 
-def join(x: Sequence[str]) -> str:
-    return "".join(x)
+def join(x: Sequence[str], sep: str = "") -> str:
+    return sep.join(x)
 
 
-# python -m src.ectools.string
-if __name__ == "__main__":
-    import math
+def _test() -> None:
 
-    import numpy as np
-
-    data = {
-        "a": 12,
-        "b": True,
-        "c": "word",
-        "d": np.pi,
-        "e": 2.718281828459045235360287471352,
-        "f": (1 + math.sqrt(5)) / 2,
-    }
-
-    pprint("print")
-    print(data)
-    print()
-
-    pprint("wadler_lindig.pprint")
-    wadler_lindig.pprint(data)
-    print()
-
-    pprint("rich.print")
-    rich.print(data)
-    print()
-
-    pprint("rich.print ∘ wadler_lindig.pformat")
-    pprint(data)
-
-    pprint(f"to_upper_camel_case: {upper_camel_case("this_is_to_upper_camel_case")}")
+    print(f"to_upper_camel_case: {upper_camel_case("this_is_to_upper_camel_case")}")
 
     sa = "this is a line\nthis is still the same\nthis is the third line\nthis is the fourth line\n"
     sb = "this is a line\nthis is still the same\nthis is just another line\nthis is the fourth line\n"
@@ -118,3 +80,8 @@ if __name__ == "__main__":
     print(sa)
     print(sb)
     print(string_diff_result)
+
+
+# python -m src.ectools.string
+if __name__ == "__main__":
+    _test()
