@@ -10,18 +10,6 @@ from itertools import chain
 logger = logging.getLogger(__name__)
 
 
-def osp_stem(x: str, /) -> str:
-    return osp.splitext(x)[0]
-
-
-def osp_extension(x: str, /) -> str:
-    return osp.splitext(x)[1]
-
-
-def osp_basestem(x: str, /) -> str:
-    return osp.splitext(osp.basename(x))[0]
-
-
 def subdirnames(x: str, /) -> Sequence[str]:
     result = []
     for root, dirs, files in os.walk(x):
