@@ -1,16 +1,29 @@
 import logging
-from collections.abc import Callable, Collection, Hashable, Iterable, Mapping, Sequence, ValuesView
-from itertools import chain
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence, Sized
+from itertools import chain as ctn
 
 from omegaconf import DictConfig, OmegaConf
-from plum import dispatch
 
 logger = logging.getLogger(__name__)
 
 
+def len_0(x: Sized, /) -> bool:
+    return len(x) == 0
+
+
+def zps(*iterables: Iterable) -> zip:
+    return zip(*iterables, strict=True)
+
+
 def sorted_keys(
-    tbl: Mapping, /, *, key: Callable | None = None, reverse: bool = False, factory: Callable = dict
+    tbl: Mapping,
+    /,
+    *,
+    key: Callable | None = None,
+    reverse: bool = False,
+    factory: Callable | None = None,
 ) -> Mapping:
+    factory = factory or type(tbl)
     return factory((k, tbl[k]) for k in sorted(tbl.keys(), key=key, reverse=reverse))
 
 
@@ -35,8 +48,16 @@ def unique_item[t](x: Iterable[t]) -> t:
     return next(iter(set_x))
 
 
+# ================================================================
+from collections.abc import Collection, Hashable, Iterable, Mapping, Sequence, ValuesView
+from itertools import chain as ctn
+
+from omegaconf import DictConfig, OmegaConf
+from plum import dispatch
+
+
 def tplchain[t](*iterables: Iterable[t]) -> Sequence[t]:
-    return tuple(chain(*iterables))
+    return tuple(ctn(*iterables))
 
 
 @dispatch
