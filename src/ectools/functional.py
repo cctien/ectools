@@ -1,9 +1,126 @@
 import functools
 from collections.abc import Callable, Iterable, Sequence, Sized
-from typing import Any, ParamSpec, TypeVar
+from functools import partial as prt
+from functools import reduce
+from itertools import chain as ctn
+from operator import is_, not_
+from typing import Any, overload
 
-T = TypeVar("T")
-P = ParamSpec("P")
+
+def identity[T](x: T) -> T:
+    return x
+
+
+def apply[S, T](f: Callable[[S], T], x: S) -> T:
+    return f(x)
+
+
+def rtapply[S, T](x: S, f: Callable[[S], T]) -> T:
+    return f(x)
+
+
+@overload
+def cmp[A]() -> Callable[[A], A]: ...
+
+
+@overload
+def cmp[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
+
+
+@overload
+def cmp[**A, B, C](f2: Callable[[B], C], f1: Callable[[A], B]) -> Callable[A, C]: ...
+
+
+@overload
+def cmp[**A, B, C, D](
+    f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[[A], B]
+) -> Callable[A, D]: ...
+
+
+@overload
+def cmp[**A, B, C, D, E](
+    f4: Callable[[D], E], f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[[A], B]
+) -> Callable[A, E]: ...
+
+
+@overload
+def cmp[**A, B, C, D, E, F](
+    f5: Callable[[E], F],
+    f4: Callable[[D], E],
+    f3: Callable[[C], D],
+    f2: Callable[[B], C],
+    f1: Callable[A, B],
+) -> Callable[A, F]: ...
+
+
+@overload
+def cmp[**A, B, C, D, E, F, G](
+    f6: Callable[[F], G],
+    f5: Callable[[E], F],
+    f4: Callable[[D], E],
+    f3: Callable[[C], D],
+    f2: Callable[[B], C],
+    f1: Callable[A, B],
+) -> Callable[A, G]: ...
+
+
+def cmp(*fs: Callable[..., Any]) -> Callable[..., Any]:
+    def apply_composed(x):
+        return reduce(rtapply, ctn([identity], reversed(fs)), x)
+
+    return apply_composed
+
+
+@overload
+def rtcmp[A]() -> Callable[[A], A]: ...
+
+
+@overload
+def rtcmp[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
+
+
+@overload
+def rtcmp[**A, B, C](f1: Callable[A, B], f2: Callable[[B], C]) -> Callable[A, C]: ...
+
+
+@overload
+def rtcmp[**A, B, C, D](
+    f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D]
+) -> Callable[A, D]: ...
+
+
+@overload
+def rtcmp[**A, B, C, D, E](
+    f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D], f4: Callable[[D], E]
+) -> Callable[A, E]: ...
+
+
+@overload
+def rtcmp[**A, B, C, D, E, F](
+    f1: Callable[A, B],
+    f2: Callable[[B], C],
+    f3: Callable[[C], D],
+    f4: Callable[[D], E],
+    f5: Callable[[E], F],
+) -> Callable[A, F]: ...
+
+
+@overload
+def rtcmp[**A, B, C, D, E, F, G](
+    f1: Callable[A, B],
+    f2: Callable[[B], C],
+    f3: Callable[[C], D],
+    f4: Callable[[D], E],
+    f5: Callable[[E], F],
+    f6: Callable[[F], G],
+) -> Callable[A, G]: ...
+
+
+def rtcmp(*fs: Callable) -> Callable:
+    def apply_composed(x):
+        return reduce(rtapply, ctn([identity], fs), x)
+
+    return apply_composed
 
 
 def be_none(x: object, /) -> bool:
@@ -14,8 +131,9 @@ def be_not_none(x: object, /) -> bool:
     return x is not None
 
 
-def tplmap(func: Callable[[T], T], *iterables: Iterable[T]) -> tuple[T, ...]:
-    return tuple(map(func, *iterables))
+_be_none = prt(is_, None)
+
+_be_not_none = cmp(not_, _be_none)
 
 
 def apply_all[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Sequence[Any]:
@@ -26,15 +144,7 @@ def be(y: object, x: object, /) -> bool:
     return x is y
 
 
-def be_empty(x: Sized, /) -> bool:
-    return len(x) == 0
-
-
-def identity[t](x: t) -> t:
-    return x
-
-
-def ngt(f: Callable[P, bool], /) -> Callable[P, bool]:
+def ngt[**P](f: Callable[P, bool], /) -> Callable[P, bool]:
     @functools.wraps(f)
     def ngt_x(*args, **kwargs):
         return not f(*args, **kwargs)
@@ -42,8 +152,7 @@ def ngt(f: Callable[P, bool], /) -> Callable[P, bool]:
     return ngt_x
 
 
-zip_strict = functools.partial(zip, strict=True)
-zip_str = functools.partial(zip, strict=True)
+# ================================================================
 
 # from types import NoneType
 
