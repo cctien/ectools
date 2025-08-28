@@ -15,6 +15,7 @@ def commandline_args() -> tuple[str | None, Sequence[str]]:
         "--cnfgr",
         "--cnfgr_file",
         "--configuration_file",
+        dest="cnfgr",
         help="Path to the YAML/JSON configuration file",
         type=str,
         default=None,
@@ -22,7 +23,7 @@ def commandline_args() -> tuple[str | None, Sequence[str]]:
     args, unknown = parser.parse_known_args()
     if any(arg.startswith("-") for arg in unknown):
         raise ValueError("Additional command line arguments ought not to start with `-`")
-    return args.configuration_file, unknown
+    return args.cnfgr, unknown
 
 
 def dictconfig_x_programme(default: Mapping | object | None) -> DictConfig:
