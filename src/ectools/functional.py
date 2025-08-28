@@ -21,14 +21,6 @@ def appll[S, T](x: S, f: Callable[[S], T]) -> T:
     return f(x)
 
 
-def params_revers(f):
-    @functools.wraps(f)
-    def _f(*args):
-        return f(*reversed(args))
-
-    return _f
-
-
 @overload
 def cmp[A]() -> Callable[[A], A]: ...
 
@@ -155,6 +147,14 @@ def cmpl(*fs: Callable) -> Callable:
         return reduce(appll, ctn([identit], fs), x)
 
     return apply_composed
+
+
+def params_revers(f):
+    @functools.wraps(f)
+    def _f(*args):
+        return f(*reversed(args))
+
+    return _f
 
 
 # @dispatch
