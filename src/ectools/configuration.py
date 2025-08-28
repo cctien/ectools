@@ -22,7 +22,7 @@ def commandline_args() -> tuple[str | None, Sequence[str]]:
     args, unknown = parser.parse_known_args()
     if any(arg.startswith("-") for arg in unknown):
         raise ValueError("Additional command line arguments ought not to start with `-`")
-    return args.cnfgr_file, unknown
+    return args.configuration_file, unknown
 
 
 def dictconfig_x_programme(default: Mapping | object | None) -> DictConfig:
