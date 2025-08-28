@@ -9,19 +9,19 @@ from typing import Any, overload
 # from plum import dispatch
 
 
-def identity[T](x: T) -> T:
+def identit[T](x: T) -> T:
     return x
 
 
-def apply[S, T](f: Callable[[S], T], x: S) -> T:
+def appl[S, T](f: Callable[[S], T], x: S) -> T:
     return f(x)
 
 
-def rtapply[S, T](x: S, f: Callable[[S], T]) -> T:
+def appll[S, T](x: S, f: Callable[[S], T]) -> T:
     return f(x)
 
 
-def params_reversed(f):
+def params_revers(f):
     @functools.wraps(f)
     def _f(*args):
         return f(*reversed(args))
@@ -76,37 +76,37 @@ def cmp[**A, B, C, D, E, F, G](
 
 def cmp(*fs: Callable[..., Any]) -> Callable[..., Any]:
     def apply_composed(x):
-        return reduce(rtapply, ctn([identity], reversed(fs)), x)
+        return reduce(appll, ctn([identit], reversed(fs)), x)
 
     return apply_composed
 
 
 @overload
-def cmpf[A]() -> Callable[[A], A]: ...
+def cmpl[A]() -> Callable[[A], A]: ...
 
 
 @overload
-def cmpf[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
+def cmpl[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
 
 
 @overload
-def cmpf[**A, B, C](f1: Callable[A, B], f2: Callable[[B], C]) -> Callable[A, C]: ...
+def cmpl[**A, B, C](f1: Callable[A, B], f2: Callable[[B], C]) -> Callable[A, C]: ...
 
 
 @overload
-def cmpf[**A, B, C, D](
+def cmpl[**A, B, C, D](
     f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D]
 ) -> Callable[A, D]: ...
 
 
 @overload
-def cmpf[**A, B, C, D, E](
+def cmpl[**A, B, C, D, E](
     f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D], f4: Callable[[D], E]
 ) -> Callable[A, E]: ...
 
 
 @overload
-def cmpf[**A, B, C, D, E, F](
+def cmpl[**A, B, C, D, E, F](
     f1: Callable[A, B],
     f2: Callable[[B], C],
     f3: Callable[[C], D],
@@ -116,7 +116,7 @@ def cmpf[**A, B, C, D, E, F](
 
 
 @overload
-def cmpf[**A, B, C, D, E, F, G](
+def cmpl[**A, B, C, D, E, F, G](
     f1: Callable[A, B],
     f2: Callable[[B], C],
     f3: Callable[[C], D],
@@ -126,9 +126,9 @@ def cmpf[**A, B, C, D, E, F, G](
 ) -> Callable[A, G]: ...
 
 
-def cmpf(*fs: Callable) -> Callable:
+def cmpl(*fs: Callable) -> Callable:
     def apply_composed(x):
-        return reduce(rtapply, ctn([identity], fs), x)
+        return reduce(appll, ctn([identit], fs), x)
 
     return apply_composed
 
@@ -148,13 +148,13 @@ def foldl[Acc, In](f: Callable[[Acc, In], Acc], init: Acc) -> Callable[[Iterable
 
 # @dispatch
 # def foldr[Acc, In](f: Callable[[In, Acc], Acc], init: Acc, iterable: Reversible[In]) -> Acc:
-#     return reduce(params_reversed(f), reversed(iterable), init)
+#     return reduce(params_revers(f), reversed(iterable), init)
 
 
 # @dispatch
 def foldr[Acc, In](f: Callable[[In, Acc], Acc], init: Acc) -> Callable[[Reversible[In]], Acc]:
     def crr_foldr(iterable: Reversible[In]) -> Acc:
-        return reduce(params_reversed(f), reversed(iterable), init)
+        return reduce(params_revers(f), reversed(iterable), init)
 
     return crr_foldr
 
