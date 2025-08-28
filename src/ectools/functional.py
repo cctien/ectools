@@ -1,10 +1,12 @@
 import functools
-from collections.abc import Callable, Iterable, Sequence, Sized
+from collections.abc import Callable, Iterable, Reversible, Sequence, Sized
 from functools import partial as prt
 from functools import reduce
 from itertools import chain as ctn
 from operator import is_, not_
 from typing import Any, overload
+
+# from plum import dispatch
 
 
 def identity[T](x: T) -> T:
@@ -17,6 +19,14 @@ def apply[S, T](f: Callable[[S], T], x: S) -> T:
 
 def rtapply[S, T](x: S, f: Callable[[S], T]) -> T:
     return f(x)
+
+
+def params_reversed(f):
+    @functools.wraps(f)
+    def _f(*args):
+        return f(*reversed(args))
+
+    return _f
 
 
 @overload
@@ -72,31 +82,31 @@ def cmp(*fs: Callable[..., Any]) -> Callable[..., Any]:
 
 
 @overload
-def rtcmp[A]() -> Callable[[A], A]: ...
+def cmpf[A]() -> Callable[[A], A]: ...
 
 
 @overload
-def rtcmp[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
+def cmpf[**A, B](f: Callable[A, B]) -> Callable[A, B]: ...
 
 
 @overload
-def rtcmp[**A, B, C](f1: Callable[A, B], f2: Callable[[B], C]) -> Callable[A, C]: ...
+def cmpf[**A, B, C](f1: Callable[A, B], f2: Callable[[B], C]) -> Callable[A, C]: ...
 
 
 @overload
-def rtcmp[**A, B, C, D](
+def cmpf[**A, B, C, D](
     f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D]
 ) -> Callable[A, D]: ...
 
 
 @overload
-def rtcmp[**A, B, C, D, E](
+def cmpf[**A, B, C, D, E](
     f1: Callable[A, B], f2: Callable[[B], C], f3: Callable[[C], D], f4: Callable[[D], E]
 ) -> Callable[A, E]: ...
 
 
 @overload
-def rtcmp[**A, B, C, D, E, F](
+def cmpf[**A, B, C, D, E, F](
     f1: Callable[A, B],
     f2: Callable[[B], C],
     f3: Callable[[C], D],
@@ -106,7 +116,7 @@ def rtcmp[**A, B, C, D, E, F](
 
 
 @overload
-def rtcmp[**A, B, C, D, E, F, G](
+def cmpf[**A, B, C, D, E, F, G](
     f1: Callable[A, B],
     f2: Callable[[B], C],
     f3: Callable[[C], D],
@@ -116,11 +126,37 @@ def rtcmp[**A, B, C, D, E, F, G](
 ) -> Callable[A, G]: ...
 
 
-def rtcmp(*fs: Callable) -> Callable:
+def cmpf(*fs: Callable) -> Callable:
     def apply_composed(x):
         return reduce(rtapply, ctn([identity], fs), x)
 
     return apply_composed
+
+
+# @dispatch
+# def foldl[Acc, In](f: Callable[[Acc, In], Acc], init: Acc, iterable: Reversible[In]) -> Acc:
+#     return reduce(f, iterable, init)
+
+
+# @dispatch
+def foldl[Acc, In](f: Callable[[Acc, In], Acc], init: Acc) -> Callable[[Iterable[In]], Acc]:
+    def crr_foldl(iterable: Iterable[In]) -> Acc:
+        return reduce(f, iterable, init)
+
+    return crr_foldl
+
+
+# @dispatch
+# def foldr[Acc, In](f: Callable[[In, Acc], Acc], init: Acc, iterable: Reversible[In]) -> Acc:
+#     return reduce(params_reversed(f), reversed(iterable), init)
+
+
+# @dispatch
+def foldr[Acc, In](f: Callable[[In, Acc], Acc], init: Acc) -> Callable[[Reversible[In]], Acc]:
+    def crr_foldr(iterable: Reversible[In]) -> Acc:
+        return reduce(params_reversed(f), reversed(iterable), init)
+
+    return crr_foldr
 
 
 def be_none(x: object, /) -> bool:
