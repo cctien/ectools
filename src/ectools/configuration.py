@@ -11,7 +11,13 @@ from omegaconf import DictConfig, OmegaConf
 def commandline_args() -> tuple[str | None, Sequence[str]]:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--cnfgr_file", help="Path to the YAML/JSON configuration file", type=str, default=None
+        "-c",
+        "--cnfgr",
+        "--cnfgr_file",
+        "--configuration_file",
+        help="Path to the YAML/JSON configuration file",
+        type=str,
+        default=None,
     )
     args, unknown = parser.parse_known_args()
     if any(arg.startswith("-") for arg in unknown):
@@ -39,19 +45,15 @@ def dictconfig_x_cli(setting: Sequence[str] | None) -> DictConfig:
     return OmegaConf.from_dotlist(setting)
 
 
-def get_configuration(
-    default: Mapping | object | None = None, strict_level: int | None = 1
-) -> DictConfig:
+def get_configuration(default: Mapping | object | None = None, strict_level: int = 0) -> DictConfig:
     cnfgr_x_programme = dictconfig_x_programme(default)
     config_filepath, arg_list = commandline_args()
     cnfgr_x_file = dictconfig_x_file(config_filepath)
     cnfgr_x_cli = dictconfig_x_cli(arg_list)
-    merged_config = OmegaConf.merge(cnfgr_x_programme, cnfgr_x_file, cnfgr_x_cli)
+    merged_config: DictConfig = OmegaConf.merge(cnfgr_x_programme, cnfgr_x_file, cnfgr_x_cli)
 
-    if strict_level is None:
+    if strict_level == 0:
         return merged_config
-    if strict_level > 1:
-        raise NotImplementedError
     if strict_level == 1:  # check
         for key in cnfgr_x_cli.keys():
             if key not in cnfgr_x_file.keys() | cnfgr_x_programme.keys():
@@ -59,7 +61,8 @@ def get_configuration(
                 warnings.warn(message)
                 breakpoint()
                 raise KeyError(message)
-    return merged_config
+        return merged_config
+    raise ValueError(f"Unknown strict level {strict_level}")
 
 
 def instance(registry: ClassRegistry, configuration: Mapping | str, **kwargs):
