@@ -29,8 +29,8 @@ def params_revers(f):
     return _f
 
 
-# @overload
-# def cmp[A]() -> Callable[[A], A]: ...
+@overload
+def cmp[A]() -> Callable[[A], A]: ...
 
 
 @overload
@@ -86,22 +86,15 @@ def cmp[**A, B, C, D, E, F, G, H](
 ) -> Callable[A, H]: ...
 
 
-# def cmp(*fs: Callable[..., Any]) -> Callable[..., Any]:
-#     def apply_composed(x):
-#         return reduce(appll, ctn([identit], reversed(fs)), x)
-
-#     return apply_composed
-
-
-def cmp(f, *fs):
-    def apply_composed(*args, **kwargs):
-        return reduce(appll, reversed(fs), f(*args, **kwargs))
+def cmp(*fs: Callable[..., Any]) -> Callable[..., Any]:
+    def apply_composed(x):
+        return reduce(appll, ctn([identit], reversed(fs)), x)
 
     return apply_composed
 
 
-# @overload
-# def cmpl[A]() -> Callable[[A], A]: ...
+@overload
+def cmpl[A]() -> Callable[[A], A]: ...
 
 
 @overload
@@ -157,16 +150,9 @@ def cmpl[**A, B, C, D, E, F, G, H](
 ) -> Callable[A, H]: ...
 
 
-# def cmpl(*fs: Callable) -> Callable:
-#     def apply_composed(x):
-#         return reduce(appll, ctn([identit], fs), x)
-
-#     return apply_composed
-
-
-def cmpl(f, *fs):
-    def apply_composed(*args, **kwargs):
-        return reduce(appll, fs, f(*args, **kwargs))
+def cmpl(*fs: Callable) -> Callable:
+    def apply_composed(x):
+        return reduce(appll, ctn([identit], fs), x)
 
     return apply_composed
 
