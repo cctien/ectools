@@ -11,7 +11,14 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
+dependencies = []
+
+[project.optional-dependencies]
+numerics = ["numpy", "pandas", "scipy"]
+data = ["dacite", "omegaconf",  "phx-class-registry", "pyyaml", "orjson"]
+formatting = ["rich", "wadler_lindig"]
+programming = ["plum-dispatch"]
+all = [
     "dacite",
     "numpy",
     "omegaconf",
