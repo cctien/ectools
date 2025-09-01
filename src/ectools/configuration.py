@@ -89,9 +89,9 @@ def merged_with_unknown(
         case 0:
             return merged(cnfgr_known, cnfgr_unknown)
         case 1:
-            unavailable = filterfalse(prt(contains, cnfgr_known), cnfgr_unknown.keys())
-            if any(unavailable):
-                message = f"Keys {list(unavailable)} in command line arguments unavailable"
+            unavailable = tuple(filterfalse(prt(contains, cnfgr_known), cnfgr_unknown.keys()))
+            if unavailable:
+                message = f"Keys {unavailable} in command line arguments unavailable"
                 warnings.warn(message)
                 breakpoint()
                 raise KeyError(message)
