@@ -35,13 +35,13 @@ def cmp[**A, B, C](f2: Callable[[B], C], f1: Callable[[A], B]) -> Callable[A, C]
 
 @overload
 def cmp[**A, B, C, D](
-    f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[[A], B]
+    f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[A, B]
 ) -> Callable[A, D]: ...
 
 
 @overload
 def cmp[**A, B, C, D, E](
-    f4: Callable[[D], E], f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[[A], B]
+    f4: Callable[[D], E], f3: Callable[[C], D], f2: Callable[[B], C], f1: Callable[A, B]
 ) -> Callable[A, E]: ...
 
 
