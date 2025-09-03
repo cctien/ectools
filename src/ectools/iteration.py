@@ -10,8 +10,12 @@ def items(x: Mapping) -> ItemsView:
     return x.items()
 
 
-def sorted_keys(x: Mapping, key: Callable | None, factory: Callable | None = None) -> Mapping:
-    _factory = dict if factory is None else factory
+def sorted_keys[K, V](
+    x: Mapping[K, V],
+    key: Callable | None = None,
+    factory: Callable[[Iterable[tuple]], Mapping] | None = None,
+) -> Mapping[K, V]:
+    _factory = factory if factory is not None else type(x)
     return _factory(sorted(items(x), key=key))
 
 
