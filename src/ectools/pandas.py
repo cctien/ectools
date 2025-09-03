@@ -4,6 +4,10 @@ from typing import Any
 import pandas as pd
 
 
+def read_parquet(filepath: str) -> pd.DataFrame:
+    return pd.read_parquet(filepath).convert_dtypes()
+
+
 def isna_all(x: Any) -> bool:
     y = pd.isna(x)
     if isinstance(y, bool):
