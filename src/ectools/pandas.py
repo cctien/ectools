@@ -12,6 +12,10 @@ def to_parquet(filepath: str, df: pd.DataFrame) -> None:
     df.to_parquet(filepath)
 
 
+def isin(df: pd.DataFrame, column: str, values: Iterable) -> pd.Series:
+    return df[column].isin(values)
+
+
 def isna_all(x: Any) -> bool:
     y = pd.isna(x)
     if isinstance(y, bool):
