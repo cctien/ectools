@@ -34,6 +34,7 @@ all = [
 
 [project.urls]
 "Homepage" = "https://github.com/cctien/ectools"
+"Repository" = "https://github.com/cctien/ectools"
 "Bug Tracker" = "https://github.com/cctien/ectools/issues"
 
 [build-system]
