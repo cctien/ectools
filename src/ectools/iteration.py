@@ -10,6 +10,11 @@ def items(x: Mapping) -> ItemsView:
     return x.items()
 
 
+def sorted_keys(x: Mapping, key: Callable | None, factory: Callable | None = None) -> Mapping:
+    _factory = dict if factory is None else factory
+    return _factory(sorted(items(x), key=key))
+
+
 filter_not_none: Callable[[Iterable], Iterable] = prt(filterfalse, prt(is_, None))
 filter_nonempty: Callable[[Iterable], Iterable] = prt(filterfalse, len_0)
 
