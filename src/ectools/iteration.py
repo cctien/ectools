@@ -6,7 +6,7 @@ from operator import is_
 from .collection import len_0
 
 
-def items(x: Mapping) -> ItemsView:
+def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
     return x.items()
 
 
