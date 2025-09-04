@@ -2,6 +2,7 @@ plum-dispatch
 
 numpy
 pandas
+polars
 scipy
 
 dacite
