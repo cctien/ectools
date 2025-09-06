@@ -21,6 +21,7 @@ def sorted_keys[K, V](
 
 filter_not_none: Callable[[Iterable], Iterable] = prt(filterfalse, prt(is_, None))
 filter_nonempty: Callable[[Iterable], Iterable] = prt(filterfalse, len_0)
+filter_not_space: Callable[[Iterable], Iterable] = prt(filterfalse, str.isspace)
 
 # ================================================================
 
