@@ -1,7 +1,8 @@
-from collections.abc import Callable, ItemsView, Iterable, Mapping, Sequence
+from collections.abc import Callable, ItemsView, Iterable, Mapping, Sequence, Sized
 from functools import partial as prt
 from itertools import filterfalse
 from operator import is_
+from typing import Any
 
 from .collection import len_0
 
@@ -19,9 +20,9 @@ def sorted_keys[K, V](
     return _factory(sorted(items(x), key=key))
 
 
-filter_not_none: Callable[[Iterable], Iterable] = prt(filterfalse, prt(is_, None))
-filter_nonempty: Callable[[Iterable], Iterable] = prt(filterfalse, len_0)
-filter_not_space: Callable[[Iterable], Iterable] = prt(filterfalse, str.isspace)
+filter_not_none: Callable[[Iterable[Any]], Iterable[Any]] = prt(filterfalse, prt(is_, None))
+filter_nonempty: Callable[[Iterable[Sized]], Iterable[Sized]] = prt(filterfalse, len_0)
+filter_not_space: Callable[[Iterable[str]], Iterable[str]] = prt(filterfalse, str.isspace)
 
 # ================================================================
 
