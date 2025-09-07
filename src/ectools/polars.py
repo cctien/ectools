@@ -1,9 +1,8 @@
 from collections.abc import Iterable, Sequence
 from operator import methodcaller
-from typing import Any
 
 import polars as pl
-from polars.expr.expr import IntoExpr
+from polars._typing import IntoExpr
 
 read_parquet = methodcaller("read_parquet")
 
