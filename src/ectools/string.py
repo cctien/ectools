@@ -5,7 +5,7 @@ from functools import partial as prt
 
 
 def format_with_spec(format_spec: str, value: object) -> str:
-    """format_with_spec(format_spec, value) is equivalent to format(value, format_spec)"""
+    """format_with_spec(format_spec, value) is equivalent to format(value, format_spec) or f"{value:format_spec}"."""
     return f"{value:{format_spec}}"
 
 
