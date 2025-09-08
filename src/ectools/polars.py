@@ -10,8 +10,7 @@ read_parquet = methodcaller("read_parquet")
 
 def one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> bool:
     """whether or not each combination of group_cols appears exactly once"""
-    non_single_row = df.group_by(group_cols).len(name="len").filter(pl.col("len") != 1)
-    return non_single_row.height == 0
+    return df.group_by(group_cols).len(name="_len").filter(pl.col("_len") != 1).height == 0
 
 
 def assert_one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> None:
