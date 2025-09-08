@@ -8,6 +8,25 @@ from polars._typing import IntoExpr
 read_parquet = methodcaller("read_parquet")
 
 
+def assert_one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> None:
+    """Assert that each combination of group_cols appears exactly once"""
+
+    violations = (
+        df.group_by(group_cols)
+        .len(name="len")
+        .filter(pl.col("len") != 1)
+        .with_columns(
+            pl.when(pl.col("len") > 1)
+            .then(pl.lit("duplicate"))
+            .otherwise(pl.lit("missing"))
+            .alias("violation_type")
+        )
+    )
+
+    if violations.height > 0:
+        raise AssertionError(f"Groups without exactly 1 row:\n{violations}")
+
+
 def stable_sort(
     df: pl.DataFrame,
     by: Sequence[IntoExpr],
