@@ -8,6 +8,11 @@ from polars._typing import IntoExpr
 read_parquet = methodcaller("read_parquet")
 
 
+def yn_col_str_to_bool(df: pl.DataFrame, col_nm: str) -> pl.DataFrame:
+    assert df[col_nm].is_in(("y", "n")).all()
+    return df.with_columns(pl.col(col_nm).eq("y").alias(col_nm))
+
+
 def one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> bool:
     """whether or not each combination of group_cols appears exactly once"""
     return df.group_by(group_cols).len().filter(pl.col("len") != 1).height == 0
