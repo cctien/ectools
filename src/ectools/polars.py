@@ -10,7 +10,12 @@ read_parquet = methodcaller("read_parquet")
 
 def one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> bool:
     """whether or not each combination of group_cols appears exactly once"""
-    return df.group_by(group_cols).len(name="_len").filter(pl.col("_len") != 1).height == 0
+    return df.group_by(group_cols).len().filter(pl.col("len") != 1).height == 0
+
+
+def contiguously_ascending(df: pl.DataFrame, column_name: str) -> bool:
+    series = df[column_name]
+    return series.is_not_null().all() and series.diff().slice(1).eq(1).all()
 
 
 def assert_one_row_per_group(df: pl.DataFrame, group_cols: Iterable[str]) -> None:
