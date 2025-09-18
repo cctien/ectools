@@ -4,7 +4,17 @@ from itertools import filterfalse
 from operator import is_
 from typing import Any
 
+from cytoolz import compose as cmp
+
 from .collection import len_0
+
+
+def tuplecmap[S, T](f: Callable[[S], T]) -> Callable[[Iterable[S]], Sequence[T]]:
+    return cmp(tuple, prt(map, f))
+
+
+def tplmap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
+    return tuple(map(f, *iterables))
 
 
 def zps(*iterables: Iterable) -> zip:
@@ -29,7 +39,3 @@ filter_nonempty: Callable[[Iterable[Sized]], Iterable[Sized]] = prt(filterfalse,
 filter_not_space: Callable[[Iterable[str]], Iterable[str]] = prt(filterfalse, str.isspace)
 
 # ================================================================
-
-
-def tplmap[S, T](func: Callable[[S], T], *iterables: Iterable[S]) -> Sequence[T]:
-    return tuple(map(func, *iterables))
