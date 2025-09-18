@@ -7,6 +7,10 @@ from typing import Any
 from .collection import len_0
 
 
+def zps(*iterables: Iterable) -> zip:
+    return zip(*iterables, strict=True)
+
+
 def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
     return x.items()
 
