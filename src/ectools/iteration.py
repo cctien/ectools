@@ -46,7 +46,7 @@ def tplmap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
     return tuple(map(f, *iterables))
 
 
-def zps(*iterables: Iterable) -> zip[tuple]:
+def zps(*iterables: Iterable) -> zip:
     return zip(*iterables, strict=True)
 
 
