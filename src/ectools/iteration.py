@@ -1,13 +1,24 @@
-from collections.abc import Callable, Generator, Iterable, Mapping, Sequence, Sized
+from collections.abc import (
+    Callable,
+    Generator,
+    Iterable,
+    Iterator,
+    Mapping,
+    MutableMapping,
+    Sequence,
+    Sized,
+)
 from functools import partial as prt
 from itertools import filterfalse
 from operator import is_
-from typing import Any, Protocol, overload
+from typing import Any, Protocol, Unpack, overload
 
 from cytoolz import compose as cmp
 from frozendict import frozendict
 
 from .collection import len_0
+
+# ================================================================
 
 
 @overload
@@ -42,6 +53,9 @@ def tuplecmap[T](f: Callable[..., T]) -> Callable[..., Sequence[T]]:
     return cmp(tuple, prt(map, f))
 
 
+# ================================================================
+
+
 def tplmap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
     return tuple(map(f, *iterables))
 
@@ -50,39 +64,31 @@ def zps(*iterables: Iterable) -> zip:
     return zip(*iterables, strict=True)
 
 
-def zps_dicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
-    """Zip keyword arguments into dictionaries."""
-    if not kwargs:
-        return
+def zip_mappings[T](**kwargs: Iterable[T]) -> Iterator[Mapping[str, T]]:
+    """Zip keyword arguments into frozendicts."""
     keys = tuple(kwargs.keys())
-    for values in zps(*kwargs.values()):
+    for values in zip(*kwargs.values()):
+        yield frozendict(zip(keys, values))
+
+
+def zps_mappings[T](**kwargs: Iterable[T]) -> Iterator[Mapping[str, T]]:
+    """Zip keyword arguments into frozendicts with strict=True."""
+    keys = tuple(kwargs.keys())
+    for values in zip(*kwargs.values(), strict=True):
+        yield frozendict(zip(keys, values))
+
+
+def zip_dicts[T](**kwargs: Iterable[T]) -> Iterator[MutableMapping[str, T]]:
+    """Zip keyword arguments into dictionaries."""
+    keys = tuple(kwargs.keys())
+    for values in zip(*kwargs.values()):
         yield dict(zip(keys, values))
 
 
-def zip_frozendicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
-    """Zip keyword arguments into dictionaries."""
-    if not kwargs:
-        return
+def zps_dicts[T](**kwargs: Iterable[T]) -> Iterator[MutableMapping[str, T]]:
+    """Zip keyword arguments into dictionaries with strict=True."""
     keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values()):
-        yield frozendict(zip(keys, values))
-
-
-def zps_frozendicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
-    """Zip keyword arguments into dictionaries."""
-    if not kwargs:
-        return
-    keys = tuple(kwargs.keys())
-    for values in zps(*kwargs.values()):
-        yield frozendict(zip(keys, values))
-
-
-def zip_dicts[T](**kwargs: Iterable[T]) -> Generator[dict[str, T], None, None]:
-    """Zip keyword arguments into dictionaries."""
-    if not kwargs:
-        return
-    keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values()):
+    for values in zip(*kwargs.values(), strict=True):
         yield dict(zip(keys, values))
 
 
@@ -106,4 +112,14 @@ filter_not_space: Callable[[Iterable[str]], Iterable[str]] = prt(filterfalse, st
 # items = methodcaller("items")
 
 # def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
+#     return x.items()
+#     return x.items()
+# ================================================================
+
+# from operator import methodcaller
+
+# items = methodcaller("items")
+
+# def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
+#     return x.items()
 #     return x.items()
