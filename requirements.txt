@@ -1,5 +1,7 @@
 plum-dispatch
 
+# jax
+jax[cuda13]
 numpy
 pandas
 polars
