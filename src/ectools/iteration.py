@@ -1,10 +1,11 @@
-from collections.abc import Callable, Iterable, Mapping, Sequence, Sized
+from collections.abc import Callable, Generator, Iterable, Mapping, Sequence, Sized
 from functools import partial as prt
 from itertools import filterfalse
 from operator import is_
 from typing import Any, Protocol, overload
 
 from cytoolz import compose as cmp
+from frozendict import frozendict
 
 from .collection import len_0
 
@@ -45,8 +46,44 @@ def tplmap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
     return tuple(map(f, *iterables))
 
 
-def zps(*iterables: Iterable) -> zip:
+def zps(*iterables: Iterable) -> zip[tuple]:
     return zip(*iterables, strict=True)
+
+
+def zps_dicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
+    """Zip keyword arguments into dictionaries."""
+    if not kwargs:
+        return
+    keys = tuple(kwargs.keys())
+    for values in zps(*kwargs.values()):
+        yield dict(zip(keys, values))
+
+
+def zip_frozendicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
+    """Zip keyword arguments into dictionaries."""
+    if not kwargs:
+        return
+    keys = tuple(kwargs.keys())
+    for values in zip(*kwargs.values()):
+        yield frozendict(zip(keys, values))
+
+
+def zps_frozendicts[T](**kwargs: Iterable[T]) -> Generator[Mapping[str, T], None, None]:
+    """Zip keyword arguments into dictionaries."""
+    if not kwargs:
+        return
+    keys = tuple(kwargs.keys())
+    for values in zps(*kwargs.values()):
+        yield frozendict(zip(keys, values))
+
+
+def zip_dicts[T](**kwargs: Iterable[T]) -> Generator[dict[str, T], None, None]:
+    """Zip keyword arguments into dictionaries."""
+    if not kwargs:
+        return
+    keys = tuple(kwargs.keys())
+    for values in zip(*kwargs.values()):
+        yield dict(zip(keys, values))
 
 
 def sorted_keys[K, V](

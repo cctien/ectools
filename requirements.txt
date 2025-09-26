@@ -7,6 +7,7 @@ pandas
 polars
 scipy
 
+frozendict
 dacite
 omegaconf
 orjson
