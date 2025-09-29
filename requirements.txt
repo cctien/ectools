@@ -11,6 +11,8 @@ frozendict
 dacite
 omegaconf
 orjson
+toolz
+cytoolz
 phx-class-registry
 pyyaml
 
