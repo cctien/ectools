@@ -18,38 +18,6 @@ from frozendict import frozendict
 from ..collection import len_0
 
 
-def zps(*iterables: Iterable) -> zip:
-    return zip(*iterables, strict=True)
-
-
-def zip_mappings[T](**kwargs: Iterable[T]) -> Iterator[Mapping[str, T]]:
-    """Zip keyword arguments into frozendicts."""
-    keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values()):
-        yield frozendict(zip(keys, values))
-
-
-def zps_mappings[T](**kwargs: Iterable[T]) -> Iterator[Mapping[str, T]]:
-    """Zip keyword arguments into frozendicts with strict=True."""
-    keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values(), strict=True):
-        yield frozendict(zip(keys, values))
-
-
-def zip_dicts[T](**kwargs: Iterable[T]) -> Iterator[MutableMapping[str, T]]:
-    """Zip keyword arguments into dictionaries."""
-    keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values()):
-        yield dict(zip(keys, values))
-
-
-def zps_dicts[T](**kwargs: Iterable[T]) -> Iterator[MutableMapping[str, T]]:
-    """Zip keyword arguments into dictionaries with strict=True."""
-    keys = tuple(kwargs.keys())
-    for values in zip(*kwargs.values(), strict=True):
-        yield dict(zip(keys, values))
-
-
 def sorted_keys[K, V](
     x: Mapping[K, V],
     key: Callable | None = None,
@@ -59,19 +27,6 @@ def sorted_keys[K, V](
     return _factory(sorted(items(x), key=key))
 
 
-filter_not_none: Callable[[Iterable[Any]], Iterable[Any]] = prt(filterfalse, prt(is_, None))
-filter_nonempty: Callable[[Iterable[Sized]], Iterable[Sized]] = prt(filterfalse, len_0)
-filter_not_space: Callable[[Iterable[str]], Iterable[str]] = prt(filterfalse, str.isspace)
-
-
-def filter_in[T](c: Collection[T], iterable: Iterable[T]) -> Iterable[T]:
-    return filter(prt(contains, c), iterable)
-
-
-def filter_not_in[T](c: Collection[T], iterable: Iterable[T]) -> Iterable[T]:
-    return filterfalse(prt(contains, c), iterable)
-
-
 # ================================================================
 
 # from operator import methodcaller
@@ -79,15 +34,4 @@ def filter_not_in[T](c: Collection[T], iterable: Iterable[T]) -> Iterable[T]:
 # items = methodcaller("items")
 
 # def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
-#     return x.items()
-#     return x.items()
-# ================================================================
-
-# from operator import methodcaller
-
-# items = methodcaller("items")
-
-# def items[K, V](x: Mapping[K, V]) -> Iterable[tuple[K, V]]:
-#     return x.items()
-#     return x.items()
 #     return x.items()
