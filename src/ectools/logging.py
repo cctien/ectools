@@ -3,9 +3,9 @@ import os
 import os.path as osp
 from collections.abc import Iterable, Mapping
 from copy import deepcopy
-from datetime import datetime
 
 from rich.logging import RichHandler
+from wadler_lindig import pformat
 
 from .collection import mapping_to_dict_rcrs
 from .time import time_now_filing
@@ -15,6 +15,18 @@ default_log_file_dirname = "results/logs"
 default_log_file_name = "log.txt"
 default_fmt: str = "%(asctime)s-%(name)s-%(levelname)s\t%(message)s"
 default_datefmt: str = "%Y%m%d-%H:%M:%S"
+
+
+class RichPrettyHandler(RichHandler):
+    def emit(self, record):
+        record.msg = pformat(record.msg)
+        super().emit(record)
+
+
+class PrettyHandler(logging.StreamHandler):
+    def emit(self, record):
+        record.msg = pformat(record.msg)
+        super().emit(record)
 
 
 def add_handler_root_logger_(handler: logging.Handler) -> None:
@@ -66,13 +78,20 @@ def get_file_handler(
 def get_stream_handler(
     level: int | str = logging.INFO,
     use_rich_handler: bool = True,
+    use_wadler_lindig: bool = True,
     fmt: str = default_fmt,
     datefmt: str = default_datefmt,
 ) -> logging.Handler:
-    if not use_rich_handler:
-        console_handler = logging.StreamHandler()
-    else:
-        console_handler = RichHandler()
+    console_handler: logging.Handler
+    match (use_rich_handler, use_wadler_lindig):
+        case (False, False):
+            console_handler = logging.StreamHandler()
+        case (False, True):
+            console_handler = PrettyHandler()
+        case (True, False):
+            console_handler = RichHandler()
+        case (True, True):
+            console_handler = RichPrettyHandler()
     console_handler.setLevel(level)
     console_handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=datefmt))
     return console_handler
@@ -86,7 +105,6 @@ def set_root_logger(
     force_clear_handlers: bool = True,
     suppressed_loggers: Iterable[str] = noisy_loggers_to_be_suppressed,
 ) -> logging.Logger:
-
     logger = logging.getLogger()
     logger.setLevel(level)
 
