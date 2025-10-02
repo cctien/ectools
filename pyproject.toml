@@ -5,7 +5,7 @@ description = "eclectic tools for various tasks"
 authors = [{ name = "Chih-chan Tien", email = "chihchan.tien@gmail.com" }]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -15,7 +15,7 @@ dependencies = []
 
 [project.optional-dependencies]
 numerics = ["numpy", "pandas", "scipy"]
-data = ["dacite", "omegaconf",  "phx-class-registry", "pyyaml", "orjson"]
+data = ["dacite", "omegaconf", "phx-class-registry", "pyyaml", "orjson"]
 formatting = ["rich", "wadler_lindig"]
 programming = ["plum-dispatch"]
 all = [

@@ -13,14 +13,6 @@ def sorted_keys(x: Mapping, key: Callable | None = None) -> Iterable[tuple]:
     return sorted(x.items(), key=cmp(key, itemgetter(0)))
 
 
-def sorted_keys_mapping[K, V](
-    x: Mapping[K, V],
-    key: Callable | None = None,
-    factory: Callable[[Iterable[tuple]], Mapping] = frozendict,
-) -> Mapping[K, V]:
-    return factory(sorted_keys(x, key=key))
-
-
 def filter_key[T](predicate: Callable[[T], bool], tbl: Mapping[T, Any]) -> Iterable[tuple[T, Any]]:
     return filter(cmp(predicate, itemgetter(0)), tbl.items())
 
@@ -29,6 +21,17 @@ def filterfalse_key[T](
     predicate: Callable[[T], bool], tbl: Mapping[T, Any]
 ) -> Iterable[tuple[T, Any]]:
     return filterfalse(cmp(predicate, itemgetter(0)), tbl.items())
+
+
+# ================================================================================================================================
+
+
+def sorted_keys_mapping[K, V](
+    x: Mapping[K, V],
+    key: Callable | None = None,
+    factory: Callable[[Iterable[tuple]], Mapping] = frozendict,
+) -> Mapping[K, V]:
+    return factory(sorted_keys(x, key=key))
 
 
 def filter_key_mapping[T](
