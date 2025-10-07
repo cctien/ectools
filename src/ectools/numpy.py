@@ -1,7 +1,4 @@
-from collections.abc import Callable
-
 import numpy as np
-from cytoolz import compose as cmp
 
 
 def np_prng_key(random_seed: int | np.random.SeedSequence | None) -> np.random.SeedSequence:
