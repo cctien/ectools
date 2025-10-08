@@ -1,12 +1,29 @@
+from collections.abc import Callable, Iterable, Iterator, Sequence
+from operator import not_
+from typing import Any, TypeVar, overload
+
+try:
+    from cytoolz import compose as cmp
+except ImportError:
+    from toolz import compose as cmp
+
+
+def apply_all[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Iterator[Any]:
+    return (f(arg) for f in functions)
+
+
+t = TypeVar("t")
+apply_all_tuple: Callable[[Iterable[Callable[[t], Any]], t], Sequence[Any]] = cmp(tuple, apply_all)
+# def apply_all_tuple[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Sequence:
+#     return tuple(apply_all(functions, arg))
+
+
+# ================================================================
+
 import functools
-from collections.abc import Callable, Iterable, Reversible, Sequence, Sized
-from functools import partial as prt
+from collections.abc import Reversible
 from functools import reduce
 from itertools import chain as ctn
-from operator import is_, not_
-from typing import Any, overload
-
-# from plum import dispatch
 
 
 def identit[T](x: T) -> T:
@@ -183,6 +200,12 @@ def foldr[Acc, In](f: Callable[[In, Acc], Acc], init: Acc) -> Callable[[Reversib
     return crr_foldr
 
 
+# ================================================================
+
+from functools import partial as prt
+from operator import is_
+
+
 def be_none(x: object, /) -> bool:
     return x is None
 
@@ -196,20 +219,16 @@ _be_none = prt(is_, None)
 _be_not_none = cmp(not_, _be_none)
 
 
-def apply_all[t](functions: Iterable[Callable[[t], Any]], arg: t) -> Sequence[Any]:
-    return tuple(f(arg) for f in functions)
-
-
 def be(y: object, x: object, /) -> bool:
     return x is y
 
 
-def ngt[**P](f: Callable[P, bool], /) -> Callable[P, bool]:
-    @functools.wraps(f)
-    def ngt_x(*args, **kwargs):
-        return not f(*args, **kwargs)
+# def ngt[**P](f: Callable[P, bool], /) -> Callable[P, bool]:
+#     @functools.wraps(f)
+#     def ngt_x(*args, **kwargs):
+#         return not f(*args, **kwargs)
 
-    return ngt_x
+#     return ngt_x
 
 
 # ================================================================
