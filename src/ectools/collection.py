@@ -1,13 +1,19 @@
-from collections.abc import Collection, Iterable, Mapping, Sequence, Sized
+from collections.abc import Callable, Collection, Iterable, Mapping, Sequence, Sized
+from functools import partial as prt
+from operator import eq
 from typing import Any
 
 from class_registry import ClassRegistry
 
+try:
+    from cytoolz import compose as cmp
+except ImportError:
+    from toolz import compose as cmp
+
 from .iteration.mapping_tools import to_frozendict
 
-
-def len_0(x: Sized, /) -> bool:
-    return len(x) == 0
+len_0: Callable[[Sized], bool] = cmp(prt(eq, 0), len)
+is_empty: Callable[[Sized], bool] = cmp(prt(eq, 0), len)
 
 
 def ordered_unique(seq: Iterable) -> Sequence:
@@ -20,12 +26,12 @@ def ordered_unique(seq: Iterable) -> Sequence:
     return tuple(result)
 
 
-def sole_item[t](x: Collection[t]) -> t:
+def sole_item[T](x: Collection[T]) -> T:
     assert len(x) == 1
     return next(iter(x))
 
 
-def unique_item[t](x: Iterable[t]) -> t:
+def unique_item[T](x: Iterable[T]) -> T:
     set_x = set(x)
     assert len(set_x) == 1
     return next(iter(set_x))
