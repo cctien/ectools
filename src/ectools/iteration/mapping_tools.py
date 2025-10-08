@@ -57,4 +57,4 @@ filterfalse_keys_mapping: Callable[[Callable[[C], bool], Mapping[C, V]], Mapping
     MappingProxyType, filterfalse_keys_dict
 )
 to_mapping: Callable[[Mapping[C, V]], Mapping[C, V]] = cmp(MappingProxyType, to_dict)
-to_frozendict: Callable[[Mapping[C, V]], frozendict[C, V]] = cmp(deepfreeze, to_mapping)
+to_frozendict: Callable[[Mapping[C, V]], frozendict[C, V]] = cmp(deepfreeze, to_dict)
