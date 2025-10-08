@@ -37,7 +37,11 @@ def unique_item[T](x: Iterable[T]) -> T:
     return next(iter(set_x))
 
 
-def instantiate[T](registry: ClassRegistry[T], configuration: Mapping[str, Any], **kwargs) -> T:
+def instantiate[T](
+    registry: ClassRegistry[T], configuration: Mapping[str, Any] | str, **kwargs
+) -> T:
+    if isinstance(configuration, str):
+        return registry.get(configuration, **kwargs)
     cnfgr = to_frozendict(configuration)
     return registry.get(cnfgr["cls"], **cnfgr.delete("cls"), **kwargs)
 
