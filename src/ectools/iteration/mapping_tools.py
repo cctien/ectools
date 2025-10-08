@@ -1,7 +1,7 @@
 from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from itertools import filterfalse
 from operator import itemgetter
-from typing import Any
+from typing import Any, TypeVar
 
 try:
     from cytoolz import compose as cmp
@@ -9,13 +9,13 @@ try:
 except ImportError:
     from toolz import compose as cmp
     from toolz import identity
-from typing import TypeVar
-
 from frozendict import deepfreeze, frozendict
 from omegaconf import DictConfig, OmegaConf
 
 
-def sorted_keys(x: Mapping, key: Callable = identity, reverse: bool = False) -> Iterable[tuple]:
+def sorted_keys[T](
+    x: Mapping[T, Any], key: Callable[[T], Any] = identity, reverse: bool = False
+) -> Iterable[tuple[T, Any]]:
     return sorted(x.items(), key=cmp(key, itemgetter(0)), reverse=reverse)
 
 
