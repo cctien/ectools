@@ -4,15 +4,14 @@ from collections.abc import Mapping, Sequence
 from dataclasses import is_dataclass
 from functools import partial as prt
 from itertools import filterfalse, takewhile
-from operator import contains, eq, methodcaller
+from operator import contains, methodcaller
 from typing import Any, Protocol
 
 from class_registry import ClassRegistry
-from frozendict import deepfreeze
+from frozendict import deepfreeze, frozendict
 from omegaconf import DictConfig, OmegaConf
 
 from .dataclasses import DataclassLike
-from .iteration.mapping_tools import filterfalse_keys_mapping
 
 
 class DictConfigMerger(Protocol):
@@ -114,11 +113,9 @@ def parsed_command_line_arguments(
     return cnfgr
 
 
-def instantiate(registry: ClassRegistry, configuration: Mapping, **kwargs) -> Any:
-    configuration_: Mapping = deepfreeze(configuration)
-    cnfgr_cls = configuration_["cls"]
-    cnfgr = filterfalse_keys_mapping(prt(eq, "cls"), configuration_)
-    return registry.get(cnfgr_cls, **cnfgr, **kwargs)
+def instantiate[T](registry: ClassRegistry[T], configuration: Mapping[str, Any], **kwargs) -> T:
+    cnfgr: frozendict = deepfreeze(configuration)
+    return registry.get(cnfgr["cls"], **cnfgr.delete("cls"), **kwargs)
 
 
 # ================================================================================================================================
