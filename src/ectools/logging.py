@@ -2,12 +2,11 @@ import logging
 import os
 import os.path as osp
 from collections.abc import Iterable, Mapping
-from copy import deepcopy
 
 from rich.logging import RichHandler
 from wadler_lindig import pformat
 
-from .collection import mapping_to_dict_rcrs
+from .iteration.mapping_tools import to_frozendict
 from .time import time_now_filing
 
 noisy_loggers_to_be_suppressed = ("requests", "urlib3")
@@ -112,22 +111,22 @@ def set_root_logger(
         logger.handlers.clear()
 
     if stream is not None:
-        stream = mapping_to_dict_rcrs(deepcopy(stream))
-        stream["level"] = level if stream.get("level") is None else stream["level"]
+        stream = to_frozendict(stream)
+        stream = stream.setdefault("level", level)
         console_handler = get_stream_handler(**stream)
         logger.addHandler(console_handler)
 
     if file is not None:
-        file = mapping_to_dict_rcrs(deepcopy(file))
-        file["level"] = level if file.get("level") is None else file["level"]
+        file = to_frozendict(file)
+        file = file.setdefault("level", level)
         file_handler = get_file_handler(**file)
         logger.addHandler(file_handler)
 
     if wandb is not None:
         from .logging_wandb_tools import get_wandb_handler
 
-        wandb = mapping_to_dict_rcrs(deepcopy(wandb))
-        wandb["level"] = level if wandb.get("level") is None else wandb["level"]
+        wandb = to_frozendict(wandb)
+        wandb = wandb.setdefault("level", level)
         wandb_handler = get_wandb_handler(**wandb)
         logger.addHandler(wandb_handler)
 

@@ -5,10 +5,8 @@ from dataclasses import is_dataclass
 from functools import partial as prt
 from itertools import filterfalse, takewhile
 from operator import contains, methodcaller
-from typing import Any, Protocol
+from typing import Protocol
 
-from class_registry import ClassRegistry
-from frozendict import deepfreeze, frozendict
 from omegaconf import DictConfig, OmegaConf
 
 from .dataclasses import DataclassLike
@@ -111,11 +109,6 @@ def parsed_command_line_arguments(
     cnfgr = merged_with_unknown(cnfgr_known, cnfgr_x_cli_unknown, strict_level)
     OmegaConf.resolve(cnfgr)
     return cnfgr
-
-
-def instantiate[T](registry: ClassRegistry[T], configuration: Mapping[str, Any], **kwargs) -> T:
-    cnfgr: frozendict = deepfreeze(configuration)
-    return registry.get(cnfgr["cls"], **cnfgr.delete("cls"), **kwargs)
 
 
 # ================================================================================================================================

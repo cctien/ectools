@@ -1,6 +1,7 @@
 from collections.abc import Callable, Iterable, Mapping, MutableMapping
 from itertools import filterfalse
 from operator import itemgetter
+from types import MappingProxyType
 from typing import Any, TypeVar
 
 try:
@@ -29,30 +30,31 @@ def filterfalse_keys[C, V](
     return filterfalse(cmp(predicate, itemgetter(0)), tbl.items())
 
 
-def to_mapping[C, V](x: Mapping[C, V]) -> Mapping[C, V]:
+def to_dict[C, V](x: Mapping[C, V]) -> MutableMapping[C, V]:
     if isinstance(x, DictConfig):
-        return deepfreeze(OmegaConf.to_container(x, resolve=True))
-    return deepfreeze(x)
+        return OmegaConf.to_container(x, resolve=True)  # type: ignore
+    return dict(x)
 
 
 C = TypeVar("C")
 V = TypeVar("V")
-sorted_keys_mapping: Callable[[Mapping[C, V], Callable[[C], Any], bool], Mapping[C, V]] = cmp(
-    frozendict, sorted_keys
-)
 sorted_keys_dict: Callable[[Mapping[C, V], Callable[[C], Any], bool], MutableMapping[C, V]] = cmp(
     dict, sorted_keys
 )
-filter_keys_mapping: Callable[[Callable[[C], bool], Mapping[C, V]], Mapping[C, V]] = cmp(
-    frozendict, filter_keys
+sorted_keys_mapping: Callable[[Mapping[C, V], Callable[[C], Any], bool], Mapping[C, V]] = cmp(
+    MappingProxyType, sorted_keys_dict
 )
 filter_keys_dict: Callable[[Callable[[C], bool], Mapping[C, V]], MutableMapping[C, V]] = cmp(
     dict, filter_keys
 )
-filterfalse_keys_mapping: Callable[[Callable[[C], bool], Mapping[C, V]], Mapping[C, V]] = cmp(
-    frozendict, filterfalse_keys
+filter_keys_mapping: Callable[[Callable[[C], bool], Mapping[C, V]], Mapping[C, V]] = cmp(
+    MappingProxyType, filter_keys_dict
 )
 filterfalse_keys_dict: Callable[[Callable[[C], bool], Mapping[C, V]], MutableMapping[C, V]] = cmp(
     dict, filterfalse_keys
 )
-to_dict: Callable[[Mapping[C, V]], MutableMapping[C, V]] = cmp(dict, to_mapping)
+filterfalse_keys_mapping: Callable[[Callable[[C], bool], Mapping[C, V]], Mapping[C, V]] = cmp(
+    MappingProxyType, filterfalse_keys_dict
+)
+to_mapping: Callable[[Mapping[C, V]], Mapping[C, V]] = cmp(MappingProxyType, to_dict)
+to_frozendict: Callable[[Mapping[C, V]], frozendict[C, V]] = cmp(deepfreeze, to_mapping)

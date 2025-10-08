@@ -1,4 +1,9 @@
-from collections.abc import Collection, Iterable, Sequence, Sized
+from collections.abc import Collection, Iterable, Mapping, Sequence, Sized
+from typing import Any
+
+from class_registry import ClassRegistry
+
+from .iteration.mapping_tools import to_frozendict
 
 
 def len_0(x: Sized, /) -> bool:
@@ -24,6 +29,11 @@ def unique_item[t](x: Iterable[t]) -> t:
     set_x = set(x)
     assert len(set_x) == 1
     return next(iter(set_x))
+
+
+def instantiate[T](registry: ClassRegistry[T], configuration: Mapping[str, Any], **kwargs) -> T:
+    cnfgr = to_frozendict(configuration)
+    return registry.get(cnfgr["cls"], **cnfgr.delete("cls"), **kwargs)
 
 
 # ================================================================
