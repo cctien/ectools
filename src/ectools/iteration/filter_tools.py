@@ -1,7 +1,7 @@
 from collections.abc import Callable, Collection, Iterable, Sized
 from functools import partial as prt
 from itertools import filterfalse
-from operator import contains, is_
+from operator import contains, eq, is_
 from typing import Any
 
 from ..collection import len_0
@@ -17,3 +17,7 @@ def filter_in[T](c: Collection[T], iterable: Iterable[T]) -> Iterable[T]:
 
 def filter_not_in[T](c: Collection[T], iterable: Iterable[T]) -> Iterable[T]:
     return filterfalse(prt(contains, c), iterable)
+
+
+def filter_not_eq[T](x: T, iterable: Iterable[T]) -> Iterable[T]:
+    return filterfalse(prt(eq, x), iterable)
