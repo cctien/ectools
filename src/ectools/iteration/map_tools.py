@@ -2,7 +2,10 @@ from collections.abc import Callable, Iterable, Sequence
 from functools import partial as prt
 from typing import overload
 
-from cytoolz import compose as cmp
+try:
+    from cytoolz import compose as cmp
+except ImportError:
+    from toolz import compose as cmp
 
 # ================================================================
 
@@ -39,7 +42,8 @@ def tuplecmap[T](f: Callable[..., T]) -> Callable[..., Sequence[T]]:
     return cmp(tuple, prt(map, f))
 
 
-# ================================================================
+def tuplemap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
+    return tuple(map(f, *iterables))
 
 
 def tplmap[T](f: Callable[..., T], *iterables: Iterable) -> Sequence[T]:
