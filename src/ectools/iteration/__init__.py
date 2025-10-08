@@ -8,6 +8,8 @@ from .map_tools import tuplecmap as tuplecmap
 from .map_tools import tuplemap as tuplemap
 from .mapping_tools import filter_keys as filter_keys
 from .mapping_tools import filter_keys_mapping as filter_keys_mapping
+from .mapping_tools import filterfalse_keys as filterfalse_keys
+from .mapping_tools import filterfalse_keys_mapping as filterfalse_keys_mapping
 from .mapping_tools import sorted_keys as sorted_keys
 from .mapping_tools import sorted_keys_mapping as sorted_keys_mapping
 from .mapping_tools import to_mapping as to_mapping
