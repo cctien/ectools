@@ -1,35 +1,32 @@
 [project]
 name = "ectools"
 version = "0.0.1"
+
 description = "eclectic tools for various tasks"
 authors = [{ name = "Chih-chan Tien", email = "chihchan.tien@gmail.com" }]
 license = { file = "LICENSE" }
 readme = "README.md"
-requires-python = ">=3.12"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
 ]
+
+requires-python = ">=3.13"
 dependencies = []
 
-[project.optional-dependencies]
-numerics = ["numpy", "pandas", "scipy"]
+[dependency-groups]
+numerics = ["numpy", "pandas", "scipy", "scipy-stubs"]
 data = ["dacite", "omegaconf", "phx-class-registry", "pyyaml", "orjson"]
 formatting = ["rich", "wadler_lindig"]
 programming = ["plum-dispatch"]
-all = [
-    "dacite",
-    "numpy",
-    "omegaconf",
-    "orjson",
-    "pandas",
-    "phx-class-registry",
-    "plum-dispatch",
-    "pyyaml",
-    "rich",
-    "scipy",
-    "wadler_lindig",
+building = ["hatchling"]
+dev = [
+  { include-group = "numerics" },
+  { include-group = "data" },
+  { include-group = "formatting" },
+  { include-group = "programming" },
+  { include-group = "building" },
 ]
 
 [project.urls]
@@ -38,11 +35,8 @@ all = [
 "Bug Tracker" = "https://github.com/cctien/ectools/issues"
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.setuptools]
-package-dir = { "" = "src" }
-
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/ectools"]
