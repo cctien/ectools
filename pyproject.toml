@@ -16,13 +16,15 @@ requires-python = ">=3.13"
 dependencies = []
 
 [dependency-groups]
-numerics = ["numpy", "pandas", "scipy", "scipy-stubs"]
+numerics = ["numpy", "scipy", "scipy-stubs", "jax[cuda13]", "jaxtyping"]
+tabulation = ["pandas"]
 data = ["dacite", "omegaconf", "phx-class-registry", "pyyaml", "orjson"]
 formatting = ["rich", "wadler_lindig"]
 programming = ["plum-dispatch"]
 building = ["hatchling"]
 dev = [
   { include-group = "numerics" },
+  { include-group = "tabulation" },
   { include-group = "data" },
   { include-group = "formatting" },
   { include-group = "programming" },
