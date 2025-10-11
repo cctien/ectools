@@ -16,18 +16,22 @@ requires-python = ">=3.13"
 dependencies = []
 
 [dependency-groups]
+nnettracking = ["wandb"]
 numerics = ["numpy", "scipy", "scipy-stubs", "jax[cuda13]", "jaxtyping"]
-tabulation = ["pandas"]
+tabulation = ["pandas", "polars"]
 data = ["dacite", "omegaconf", "phx-class-registry", "pyyaml", "orjson"]
 formatting = ["rich", "wadler_lindig"]
-programming = ["plum-dispatch"]
+programming = ["plum-dispatch", "cytoolz"]
+development = ["toolz"]
 building = ["hatchling"]
 dev = [
+  { include-group = "nnettracking" },
   { include-group = "numerics" },
   { include-group = "tabulation" },
   { include-group = "data" },
   { include-group = "formatting" },
   { include-group = "programming" },
+  { include-group = "development" },
   { include-group = "building" },
 ]
 
