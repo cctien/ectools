@@ -7,6 +7,7 @@ from itertools import filterfalse, takewhile
 from operator import contains, methodcaller
 from typing import Protocol
 
+from frozendict import deepfreeze
 from omegaconf import DictConfig, OmegaConf
 
 from .dataclasses import DataclassLike
@@ -102,13 +103,12 @@ def parsed_command_line_arguments(
     default: Mapping | DataclassLike | None = None,
     parser: argparse.ArgumentParser | None = None,
     strict_level: int = 0,
-) -> DictConfig:
+) -> Mapping:
     cnfgr_x_program = dictconfig_created(default)
     cnfgr_x_cli, cnfgr_x_cli_unknown = parsed_arguments(parser)
     cnfgr_known = merged(cnfgr_x_program, cnfgr_x_cli)
     cnfgr = merged_with_unknown(cnfgr_known, cnfgr_x_cli_unknown, strict_level)
-    OmegaConf.resolve(cnfgr)
-    return cnfgr
+    return deepfreeze(OmegaConf.to_container(cnfgr, resolve=True))
 
 
 # ================================================================================================================================
