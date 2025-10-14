@@ -13,13 +13,34 @@ classifiers = [
 ]
 
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+  # data
+  "dacite",
+  "omegaconf",
+  "phx-class-registry",
+  "pyyaml",
+  "orjson",
+  "frozendict",
+  # formatting
+  "rich",
+  "wadler_lindig",
+  # programming
+  "plum-dispatch",
+  "cytoolz",
+]
 
 [dependency-groups]
 nnettracking = ["wandb"]
 numerics = ["numpy", "scipy", "scipy-stubs", "jax[cuda13]", "jaxtyping"]
 tabulation = ["pandas", "polars"]
-data = ["dacite", "omegaconf", "phx-class-registry", "pyyaml", "orjson", "frozendict"]
+data = [
+  "dacite",
+  "omegaconf",
+  "phx-class-registry",
+  "pyyaml",
+  "orjson",
+  "frozendict",
+]
 formatting = ["rich", "wadler_lindig"]
 programming = ["plum-dispatch", "cytoolz"]
 development = ["toolz"]
