@@ -1,7 +1,7 @@
 from collections.abc import Callable, Collection, Iterable, Mapping, Sequence, Sized
 from functools import partial as prt
 from operator import eq
-from typing import Any
+from typing import Any, Callable
 
 from class_registry import ClassRegistry
 
