@@ -16,9 +16,17 @@ def seed_torch_(seed: int | None) -> None:
     return
 
 
-def fill_diagonal(
-    x: Tensor, value: number_like, *, offset: int = 0, dim1: int = 0, dim2: int = 1
+def set_diagonal(
+    x: Tensor, value: number_like, *, offset: int = 0, dim1: int = -2, dim2: int = -1
 ) -> Tensor:
     dshape = x.diagonal(offset=offset, dim1=dim1, dim2=dim2).shape
     src = torch.full(dshape, value, dtype=x.dtype, device=x.device)
     return torch.diagonal_scatter(x, src, offset=offset, dim1=dim1, dim2=dim2)
+
+
+def fill_diagonal(
+    x: torch.Tensor, value: number_like, *, offset: int = 0, dim1: int = -2, dim2: int = -1
+) -> torch.Tensor:
+    x = x.clone()
+    x.diagonal(offset=offset, dim1=dim1, dim2=dim2).fill_(value)
+    return x
