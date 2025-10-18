@@ -1,9 +1,11 @@
 import math
+from typing import TypeAlias
 
 import numpy as np
-from jaxtyping import Float, Int
 from numpy.typing import ArrayLike
 from scipy import special
+
+number_like: TypeAlias = bool | int | float | complex
 
 
 def isclose_to_int(x: float, /, **kwargs) -> bool:
@@ -16,7 +18,7 @@ def logsumexp(
     axis: int | tuple[int] | None = None,
     keepdims: bool = False,
 ) -> np.ndarray:
-    return special.logsumexp(a, axis=axis, b=b, keepdims=keepdims)  # type: ignore[return-value]
+    return special.logsumexp(a, axis=axis, b=b, keepdims=keepdims)
 
 
 def _logsumexp_numpy(
