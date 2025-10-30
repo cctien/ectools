@@ -19,7 +19,14 @@ apply_all_tuple: Callable[[Iterable[Callable[[t], Any]], t], Sequence[Any]] = cm
 
 
 # ================================================================
+import inspect
 
+
+def parameters(x: Callable[..., Any]) -> Sequence[str]:
+    return tuple(inspect.signature(x).parameters)
+
+
+# ================================================================
 import functools
 from collections.abc import Reversible
 from functools import reduce
